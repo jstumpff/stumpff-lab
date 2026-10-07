@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="The Stumpff Lab at the University of Vermont studies how kinesin motor proteins are regulated and how their dysfunction contributes to cancer, bone dysplasia, neurodevelopmental disorders, and infertility.">
+<title>Stumpff Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+html, body { margin: 0; }
+[hidden] { display: none !important; }
+/* Layout: sticky anchor nav → split hero (thesis left, lab micrograph right) → research (4 project areas + 3 themes) → dark CIN feature band with live model → people, papers, movies → recruiting band */
+:root {
+  --bg: #f6f7f5;
+  --surface: #ffffff;
+  --ink: #17231f;
+  --muted: #56645f;
+  --line: #d9dfdb;
+  --accent: #1d5c46;
+  --accent-soft: #e3eee8;
+  --gold: #a87a12;
+  --field: #070a0c;
+  --band: #14382b;
+  --band-ink: #eef4f0;
+  --band-muted: #c3d3ca;
+  --band-gold: #f1d27f;
+  --display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --body: "Literata", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #101513; --surface: #161d1a; --ink: #e5ebe7; --muted: #9aa8a2; --line: #2a3531;
+    --accent: #6fc39f; --accent-soft: #1c2c25; --gold: #e0b44a; --band: #0d241b; --band-ink: #e5efe9;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #101513; --surface: #161d1a; --ink: #e5ebe7; --muted: #9aa8a2; --line: #2a3531;
+  --accent: #6fc39f; --accent-soft: #1c2c25; --gold: #e0b44a; --band: #0d241b; --band-ink: #e5efe9;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.6; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3, h4 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; }
+img, video { max-width: 100%; display: block; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; }
+.eyebrow { font-family: var(--display); font-weight: 600; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+.eyebrow-link { color: inherit; text-decoration-color: color-mix(in srgb, var(--gold) 45%, transparent); }
+.eyebrow-link:hover { text-decoration-color: currentColor; }
+.subhead { display: grid; gap: 6px; margin-bottom: 24px; max-width: 48em; }
+.subhead h3 { font-size: 24px; font-weight: 700; }
+.subhead p { color: var(--muted); }
+.subsection + .subsection { margin-top: 64px; }
+.mono { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+.cite { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+
+/* nav */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 10px 16px; padding-block: 12px; flex-wrap: wrap; }
+.brand { font-family: var(--display); font-weight: 800; font-size: 19px; color: var(--ink); text-decoration: none; display: flex; gap: 10px; align-items: baseline; }
+.brand small { font-weight: 500; font-size: 13px; color: var(--muted); }
+.nav ul { list-style: none; display: flex; gap: 4px 18px; margin: 0; padding: 0; flex-wrap: wrap; }
+.nav li a { font-family: var(--display); font-weight: 600; font-size: 14.5px; color: var(--muted); text-decoration: none; }
+.nav li a:hover { color: var(--accent); }
+.nav li a.join { color: var(--accent); }
+
+/* hero */
+.hero { padding-block: 56px 64px; }
+.hero .wrap { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; }
+.hero h1 { font-size: clamp(34px, 4.8vw, 52px); font-weight: 800; margin-block: 14px 20px; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero .lede { font-size: 19px; color: var(--muted); max-width: 34em; }
+.hero .areas { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.hero .areas a { font-family: var(--display); font-weight: 600; font-size: 14px; padding: 6px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); text-decoration: none; }
+.hero .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+.btn { font-family: var(--display); font-weight: 600; font-size: 15px; padding: 11px 18px; border-radius: 999px; text-decoration: none; border: 1.5px solid var(--accent); }
+.btn.primary { background: var(--accent); color: var(--bg); }
+.btn.ghost { color: var(--accent); }
+.hero figure { margin: 0; min-width: 0; }
+.hero figure img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 14px; background: var(--field); }
+.hero figcaption { font-size: 14px; color: var(--muted); margin-top: 10px; }
+
+/* sections */
+section.block { padding-block: 72px; border-top: 1px solid var(--line); }
+.sec-head { display: grid; gap: 10px; margin-bottom: 36px; max-width: 48em; }
+.sec-head h2 { font-size: clamp(28px, 3.6vw, 38px); font-weight: 700; }
+.sec-head p { color: var(--muted); }
+
+/* project areas */
+.projects { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+.project { display: grid; grid-template-rows: auto 1fr; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; min-width: 0; }
+.project img { width: 100%; aspect-ratio: 2.4 / 1; object-fit: cover; background: var(--field); }
+.project .body { display: grid; gap: 8px; align-content: start; padding: 20px 22px 22px; min-width: 0; }
+.project .area { font-family: var(--display); font-weight: 700; font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+.project h3 { font-size: 20px; font-weight: 700; }
+.project p { font-size: 15.5px; color: var(--muted); }
+.project .meta { font-size: 14px; color: var(--muted); }
+.project .meta b { font-family: var(--display); color: var(--ink); font-weight: 600; }
+.project.featured { border-color: var(--accent); }
+
+.themes-head { margin-top: 64px; margin-bottom: 24px; display: grid; gap: 8px; max-width: 48em; }
+.themes-head h3 { font-size: 24px; }
+.themes-head p { color: var(--muted); }
+.themes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.theme { display: grid; gap: 10px; align-content: start; min-width: 0; border-top: 2px solid var(--accent); padding-top: 14px; }
+.theme .n { font-family: var(--mono); font-size: 12.5px; color: var(--accent); }
+.theme h4 { font-size: 19px; font-weight: 700; }
+.theme p { color: var(--muted); font-size: 15.5px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-family: var(--mono); font-size: 12px; padding: 3px 8px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); }
+
+.scales { margin-top: 56px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.scale { display: grid; gap: 10px; min-width: 0; }
+.scale video, .scale img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; background: var(--field); }
+.scale b { font-family: var(--display); font-size: 16px; }
+.scale span { font-size: 14.5px; color: var(--muted); }
+
+/* CIN feature */
+.cin { background: var(--field); color: #e8eeea; padding-block: 80px; }
+.cin .eyebrow { color: #e0b44a; }
+.cin h2 { font-size: clamp(30px, 4vw, 44px); font-weight: 800; margin-block: 10px 16px; max-width: 20em; }
+.cin .lede { color: #b9c6c0; max-width: 42em; font-size: 18px; }
+.cin-grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: 48px; margin-top: 44px; align-items: start; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; min-width: 0; }
+.steps li { display: grid; grid-template-columns: 28px 1fr; gap: 14px; padding-block: 14px; border-top: 1px solid #222b27; }
+.steps .k { font-family: var(--mono); font-size: 13px; color: #e0b44a; padding-top: 3px; }
+.steps h4 { font-size: 17px; font-weight: 700; margin-bottom: 4px; color: #f2f5f3; }
+.steps p { font-size: 15px; color: #b9c6c0; }
+.steps .src { font-family: var(--mono); font-size: 12px; color: #8a9a93; margin-top: 4px; }
+.scope { background: #0d1215; border: 1px solid #222b27; border-radius: 14px; padding: 14px; min-width: 0; }
+.scope canvas { width: 100%; height: auto; aspect-ratio: 4 / 3; display: block; border-radius: 8px; max-width: 100%; }
+.scope-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 4px 2px; }
+.toggle { display: inline-flex; flex-wrap: wrap; border: 1px solid #39443f; border-radius: 18px; padding: 3px; gap: 2px; }
+.toggle button { font-family: var(--display); font-weight: 600; font-size: 13px; border: 0; background: transparent; color: #aab6b0; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+.toggle button[aria-pressed="true"] { background: #e8eeea; color: #0b0f12; }
+.readout { font-family: var(--mono); font-size: 13px; color: #aab6b0; }
+.readout b { color: #f1c75b; font-weight: 500; }
+.scope figcaption { font-size: 14px; color: #aab6b0; padding: 10px 4px 0; line-height: 1.5; }
+.partners { margin-top: 40px; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 15px; color: #b9c6c0; }
+.partners strong { font-family: var(--display); color: #f2f5f3; font-weight: 600; }
+.cin-img { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.cin-img figure { margin: 0; min-width: 0; }
+.cin-img img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; }
+.cin-img figcaption { font-size: 13px; color: #8a9a93; margin-top: 6px; }
+
+/* people */
+.labphoto { margin: 0 0 40px; }
+.labphoto img { width: 100%; aspect-ratio: 16 / 7; object-fit: cover; object-position: center 40%; border-radius: 14px; }
+.labphoto figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }
+.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 28px 24px; }
+.person { display: grid; gap: 4px; align-content: start; }
+.avatar { width: 100%; aspect-ratio: 4 / 5; max-width: 100%; border-radius: 10px; background: var(--accent-soft); display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 34px; color: var(--accent); margin-bottom: 8px; object-fit: cover; }
+.person h3 { font-size: 17.5px; font-weight: 700; }
+.person .role { font-family: var(--display); font-size: 14px; color: var(--gold); font-weight: 600; }
+.person p { font-size: 14.5px; color: var(--muted); }
+.confirm { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px dashed var(--line); padding: 1px 6px; border-radius: 4px; justify-self: start; margin-top: 2px; }
+.alumni { margin-top: 56px; }
+.alumni h3 { font-size: 20px; margin-bottom: 6px; }
+.alumni > p { color: var(--muted); margin-bottom: 18px; font-size: 16px; }
+.alum-table { overflow-x: auto; }
+.alum-table table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 520px; }
+.alum-table th { text-align: left; font-family: var(--display); font-weight: 600; font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line); }
+.alum-table td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+.alum-table td:nth-child(3) { font-family: var(--mono); font-size: 13px; color: var(--muted); white-space: nowrap; }
+.alum-table .todo { color: var(--muted); font-style: italic; }
+.alum-table tr.grp th { padding-top: 22px; color: var(--accent); border-bottom: 1px solid var(--line); }
+.alum-table tbody tr.grp:first-child th { padding-top: 10px; }
+.profiles { display: flex; gap: 14px; margin-top: 8px; font-family: var(--display); font-weight: 600; font-size: 14px; }
+.ug-head { font-size: 15px; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin: 36px 0 12px; font-weight: 600; }
+.ug { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px 28px; }
+.ug li { display: grid; grid-template-columns: 1fr auto; gap: 0 10px; font-size: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.ug b { font-family: var(--display); font-weight: 600; }
+.ug .yrs { font-family: var(--mono); font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ug .now { grid-column: 1 / -1; color: var(--muted); font-size: 14px; }
+.collab { margin-top: 56px; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; }
+.collab h3 { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; font-weight: 600; }
+.collab ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 15.5px; }
+.collab ul.two { grid-template-columns: 1fr 1fr; gap: 4px 24px; }
+.collab li span { color: var(--muted); }
+
+/* pubs */
+.year { display: grid; grid-template-columns: 90px 1fr; gap: 20px; padding-block: 18px; border-top: 1px solid var(--line); }
+.year > .y { font-family: var(--display); font-weight: 800; font-size: 22px; color: var(--accent); }
+.year ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; min-width: 0; }
+.pub .t { font-family: var(--display); font-weight: 600; font-size: 17px; line-height: 1.35; }
+.pub .t a { color: var(--ink); text-decoration: none; }
+.pub .t a:hover { color: var(--accent); text-decoration: underline; }
+.pub .a { font-size: 14.5px; color: var(--muted); }
+.pub .a b { color: var(--ink); font-weight: 500; }
+.pub .j { font-size: 14.5px; }
+.badge { font-family: var(--mono); font-size: 11px; padding: 1px 6px; border-radius: 4px; border: 1px solid var(--gold); color: var(--gold); margin-left: 6px; vertical-align: 1px; }
+.pill { font-family: var(--mono); font-size: 11px; padding: 1px 6px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); margin-left: 6px; vertical-align: 1px; }
+
+/* movies */
+.reel { display: grid; gap: 32px; }
+.reel-row { display: flex; gap: 20px; align-items: flex-start; }
+.reel figure { margin: 0; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.reel video { width: 100%; height: auto; background: var(--field); border-radius: 10px; }
+.reel figcaption { font-size: 15px; color: var(--muted); }
+.reel figcaption b { font-family: var(--display); color: var(--ink); }
+.reel .credit { display: block; font-family: var(--mono); font-size: 12.5px; margin-top: 2px; }
+
+.art-rows { display: grid; gap: 28px; }
+.art { display: flex; gap: 20px; align-items: flex-start; }
+.art-video { border-radius: 10px; overflow: hidden; background: var(--field); }
+.art-video video { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.art figure { margin: 0; display: grid; gap: 10px; min-width: 0; }
+.art-open { display: block; padding: 0; border: 0; background: var(--field); border-radius: 10px; overflow: hidden; cursor: zoom-in; width: 100%; }
+.art-open img { width: 100%; height: auto; transition: transform .4s ease; }
+.art-open:hover img { transform: scale(1.02); }
+.art figcaption { font-size: 15px; color: var(--muted); }
+.art figcaption b { font-family: var(--display); color: var(--ink); }
+.art .credit { display: block; font-family: var(--mono); font-size: 12.5px; margin-top: 2px; }
+.lightbox { position: fixed; inset: 0; z-index: 50; background: rgba(4,6,8,.92); display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) 16px max(16px, env(safe-area-inset-bottom, 0px)); }
+.lightbox figure { margin: 0; display: grid; gap: 12px; max-width: min(1400px, 100%); }
+.lightbox img { max-width: 100%; max-height: 80vh; width: auto; margin: 0 auto; border-radius: 6px; }
+.lightbox figcaption { color: #d6e2db; font-size: 15px; text-align: center; max-width: 60em; margin: 0 auto; }
+.lightbox-close { position: absolute; top: max(14px, env(safe-area-inset-top, 0px)); right: 16px; font-family: var(--display); font-weight: 600; font-size: 14px; color: #0b0f12; background: #e8eeea; border: 0; border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .art-open img { transition: none; } }
+@media (max-width: 640px) { .reel-row { flex-direction: column; } .reel-row figure { flex: none !important; width: 100%; } .reel-row video[height="1080"] { max-height: 70vh; width: auto; margin: 0 auto; } .art { flex-direction: column; } .art figure { flex: none !important; width: 100%; } }
+
+/* join */
+.join-band { background: var(--band); color: var(--band-ink); padding-block: 80px; }
+.join-band .eyebrow { color: #e0b44a; }
+.join-band h2 { font-size: clamp(30px, 4vw, 44px); font-weight: 800; margin-block: 10px 16px; max-width: 18em; }
+.join-band .lede { color: var(--band-muted); max-width: 42em; font-size: 18px; }
+.paths { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 44px; }
+.path { display: grid; gap: 8px; align-content: start; border-top: 2px solid #e0b44a; padding-top: 14px; min-width: 0; }
+.path h3 { font-size: 19px; }
+.path p { color: var(--band-muted); font-size: 15.5px; }
+.path a { color: var(--band-gold); }
+.mentoring { margin-top: 56px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px 32px; }
+.mentoring div { display: grid; gap: 6px; align-content: start; }
+.mentoring h3 { font-size: 18px; color: var(--band-gold); }
+.mentoring p { color: #d6e2db; font-size: 15.5px; }
+
+/* news + contact */
+.news ul { list-style: none; margin: 0; padding: 0; }
+.news li { display: grid; grid-template-columns: 110px 1fr; gap: 20px; padding-block: 14px; border-top: 1px solid var(--line); }
+.news .d { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 3px; }
+.contact { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.contact h3 { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
+.copy { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.copy code { font-family: var(--mono); font-size: 15px; user-select: all; }
+.copy button { font-family: var(--display); font-size: 12.5px; font-weight: 600; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 3px 10px; cursor: pointer; }
+footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+
+@media (max-width: 960px) {
+  .hero .wrap, .themes, .contact, .cin-grid, .collab, .projects { grid-template-columns: 1fr; }
+  .paths { grid-template-columns: 1fr 1fr; }
+  .scales { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .paths, .scales { grid-template-columns: 1fr; }
+  .project { grid-template-columns: 1fr; }
+  .project img { width: 100%; height: auto; aspect-ratio: 16 / 9; }
+  .year, .news li { grid-template-columns: 1fr; gap: 6px; }
+  .collab ul.two { grid-template-columns: 1fr; }
+  .labphoto img { aspect-ratio: 4 / 3; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top">Stumpff Lab <small>University of Vermont</small></a>
+    <ul>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#cin">Cancer</a></li>
+      <li><a href="#people">People</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#news">News</a></li>
+      <li><a class="join" href="#join">Join us</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow"><a class="eyebrow-link" href="https://www.uvm.edu/larnermed/mpb">Molecular Physiology &amp; Biophysics</a> · UVM</p>
+      <h1>How cells tune their molecular motors and the <em>consequences of motor dysfunction</em></h1>
+      <p class="lede">Molecular motors are tiny protein machines that turn chemical energy into movement, walking along tracks inside the cell to carry cargo and to push and pull on chromosomes. We study kinesins, a family of motors that move cargo, build the mitotic spindle, and segregate chromosomes. We ask how each kinesin is switched on, switched off, and adjusted for the job a particular cell needs, and why breaking that control causes cancer, bone disease, neurodevelopmental disorders, and infertility.</p>
+      <div class="areas" aria-label="Research areas">
+        <a href="#p-cancer">Cancer</a><a href="#p-bone">Bone dysplasia</a><a href="#p-neuro">Neurodevelopment</a><a href="#p-fertility">Infertility</a>
+      </div>
+      <div class="cta">
+        <a class="btn primary" href="#join">Train with us</a>
+        <a class="btn ghost" href="#research">Our research</a>
+      </div>
+    </div>
+    <figure>
+      <img src="media/hero-spindle.jpg" alt="Fluorescence image of a human mitotic spindle: green microtubules fan out from two poles around blue chromosomes aligned at the center" width="1400" height="1400">
+      <figcaption>A human cell in metaphase. Microtubules (green) align the chromosomes (blue) at the spindle equator before they are pulled apart.</figcaption>
+    </figure>
+  </div>
+</header>
+
+<section class="block" id="research">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Research</p>
+      <h2>How are kinesins regulated for cell- and tissue-specific functions?</h2>
+      <p>The human genome encodes 45 kinesins. They share a conserved motor domain but behave very differently, and when their regulation fails the damage is often confined to one tissue. We work across four disease contexts, connected by a shared set of mechanistic questions.</p>
+    </div>
+
+    <div class="subsection">
+      <div class="subhead">
+        <h3>Research Themes</h3>
+      </div>
+      <div class="themes">
+        <article class="theme">
+          <span class="n">Theme 1</span>
+          <h4>Spatial and temporal regulation of kinesin activity</h4>
+          <p>How are motors turned on and off at the right time and place? We map post-translational modification "switches" in the motor domain (e.g. KIF18A S357 and S284, KIF11 Y211, KIF22 T158) that tune velocity, force, microtubule binding, and auto-inhibition.</p>
+          <div class="tags"><span class="tag">PTMs</span><span class="tag">mass spectrometry</span><span class="tag">genetic engineering</span><span class="tag">single molecule biophysics</span><span class="tag">FRET biosensors</span><span class="tag">optogenetics</span></div>
+        </article>
+        <article class="theme">
+          <span class="n">Theme 2</span>
+          <h4>Cell-type-specific sensitivity to kinesin dysregulation</h4>
+          <p>Why does a mutation in a motor found in every cell damage only one tissue? We compare chondrocytes, neurons, germ cells, and tumor cells to find the mechanical and regulatory features that make a cell type vulnerable.</p>
+          <div class="tags"><span class="tag">cell-type comparisons</span><span class="tag">micropatterning</span><span class="tag">cellular differentiation</span><span class="tag">genomics</span><span class="tag">transcriptomics</span></div>
+        </article>
+        <article class="theme">
+          <span class="n">Theme 3</span>
+          <h4>Kinesins and MAPs in spindle architecture</h4>
+          <p>How do motors and other microtubule-associated proteins work together to build a spindle?</p>
+          <div class="tags"><span class="tag">CRISPRi/a screens</span><span class="tag">reconstitution assays</span><span class="tag">high-temporal resolution imaging</span></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="subhead">
+        <h3>Current Projects</h3>
+      </div>
+      <div class="projects">
+        <article class="project featured" id="p-cancer">
+          <img src="media/kif18a-spindle.jpg" alt="Mitotic spindle with KIF18A in green concentrated at microtubule ends near aligned chromosomes, microtubules in red" width="700" height="720">
+          <div class="body">
+            <span class="area">Cancer</span>
+            <h3>Why do chromosomally unstable tumors depend on KIF18A?</h3>
+            <p>Tumor cells with chromosome instability need KIF18A to divide; normal cells don't. We study why, and what makes some tumors sensitive and others resistant to KIF18A inhibitors now in clinical trials. <a href="#cin">More below</a>.</p>
+            <p class="meta"><b>Project lead:</b> Ethan Wagner</p>
+          </div>
+        </article>
+        <article class="project" id="p-bone">
+          <img src="media/chromosome-segregation.jpg" alt="Time series of dividing cells, chromosomes in green and spindle in magenta: control cells separate their chromosomes in anaphase while mutant cells fail to elongate the spindle" width="1200" height="488">
+          <div class="body">
+            <span class="area">Bone dysplasia</span>
+            <h3>Why do KIF22 mutations affect bone specifically?</h3>
+            <p>Patient mutations in the chromokinesin KIF22 cause SEMDJL2, a skeletal growth disorder. Mutant KIF22 stays active in anaphase and blocks spindle elongation. We test how chondrocyte spindle mechanics and the confined growth plate make bone uniquely sensitive.</p>
+            <p class="meta"><b>Project lead:</b> Amila Šemić</p>
+          </div>
+        </article>
+        <article class="project" id="p-neuro">
+          <img src="media/neurons.jpg" alt="Differentiated neuronal cells with long neurites, tubulin in green and nuclei in blue" width="900" height="900">
+          <div class="body">
+            <span class="area">Neurodevelopment</span>
+            <h3>How does KIFBP promote neurite outgrowth?</h3>
+            <p>Loss of kinesin-binding protein (KIFBP) causes Goldberg-Shprintzen syndrome, a neurodevelopmental disorder. KIFBP knockout cells fail to extend neurites, and we are defining how KIFBP's control of kinesins supports neuronal development.</p>
+            <p class="meta"><b>Project lead:</b> Sarah-Catherine Paschall</p>
+          </div>
+        </article>
+        <article class="project" id="p-fertility">
+          <img src="media/kif18a-germ-cells.jpg" alt="Testis section from a Kif18a mutant mouse, DNA in blue and alpha-tubulin in green" width="358" height="359">
+          <div class="body">
+            <span class="area">Infertility</span>
+            <h3>Do kinesin mutations cause aneuploidy in eggs?</h3>
+            <p>Exome sequencing has turned up variants in kinesins linked to infertility. We are testing how these variants affect motor function and chromosome segregation.</p>
+            <p class="meta"><b>Project lead:</b> Lindsey Alpeter, MD</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cin" id="cin">
+  <div class="wrap">
+    <p class="eyebrow">Featured · Cancer</p>
+    <h2>Chromosome instability as a targetable vulnerability</h2>
+    <p class="lede">Many aggressive tumors, including most high-grade ovarian and triple-negative breast cancers, constantly gain and lose chromosomes. This chromosome instability (CIN) drives tumor evolution, but it also leaves cancer cells dependent on mitotic machinery that normal cells can do without. KIF18A is one of those dependencies.</p>
+    <div class="cin-grid">
+      <ol class="steps">
+        <li><span class="k">1</span><div><h4>CIN tumor cells need KIF18A; normal cells don't</h4><p>Depleting KIF18A causes severe spindle defects and stops proliferation in CIN tumor cells, while normal diploid cells divide with minor defects.</p><p class="src">Marquis et al., Nat Commun 2021 · Cohen-Sharir et al., Nature 2021</p></div></li>
+        <li><span class="k">2</span><div><h4>Keeping chromosomes attached</h4><p>KIF18A helps cells hold on to the microtubule attachments that connect chromosomes to the spindle. In sensitive tumor cells, losing KIF18A leaves some chromosomes stranded near the spindle poles and holds cells in mitosis. We are working out why CIN cells are especially vulnerable to this.</p><p class="src">Fonseca et al., bioRxiv 2026</p></div></li>
+        <li><span class="k">3</span><div><h4>Druggable surfaces and clinical inhibitors</h4><p>We identified the motor's α4 helix as a therapeutic target and helped define how two KIF18A inhibitors now in Phase I trials work.</p><p class="src">Schutt et al., Front Mol Biosci 2024 · Phillips et al., Nat Commun 2025</p></div></li>
+        <li><span class="k">4</span><div><h4>Why do some tumors respond and others resist?</h4><p>Not every chromosomally unstable tumor responds to KIF18A inhibitors, and tumors that respond may adapt. What decides whether a cancer cell is sensitive or resistant, and can those features predict which patients will benefit and which drugs to combine? Genetic background matters: in mice, changes in ANAPC7 alter how strongly both germ cells and tumor cells depend on KIF18A.</p><p class="src">Nesbit et al., Sci Rep 2025</p></div></li>
+      </ol>
+      <div>
+        <figure class="scope" style="margin:0">
+          <canvas id="spindle" width="800" height="600" aria-label="Animated schematic of chromosomes at the metaphase plate between two spindle poles under three conditions"></canvas>
+          <div class="scope-bar">
+            <div class="toggle" role="group" aria-label="Condition">
+              <button type="button" data-mode="0" aria-pressed="true">Untreated</button>
+              <button type="button" data-mode="1" aria-pressed="false">Normal cell + KIF18Ai</button>
+              <button type="button" data-mode="2" aria-pressed="false">CIN cell + KIF18Ai</button>
+            </div>
+            <span class="readout">polar chromosomes <b id="polar">0</b></span>
+          </div>
+          <figcaption>Schematic model. Inhibiting KIF18A loosens chromosome alignment in every cell, but in CIN tumor cells some chromosomes lose their attachments and drift toward the poles.</figcaption>
+        </figure>
+      </div>
+    </div>
+    <div class="partners"><strong>Industry partners</strong><span>Apeiron Therapeutics</span><span>Volastra Therapeutics</span></div>
+  </div>
+</section>
+
+<section class="block" id="people">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">People</p>
+      <h2>Who's in the lab</h2>
+    </div>
+    <figure class="labphoto">
+      <img src="media/lab-photo.jpg" alt="Stumpff lab members standing together outdoors in summer" width="1800" height="1350">
+      <figcaption>The Stumpff lab.</figcaption>
+    </figure>
+    <div class="people">
+      <div class="person"><img class="avatar" src="media/jason-stumpff.jpg" alt="Jason Stumpff" width="400" height="500"><h3>Jason Stumpff, PhD</h3><span class="role">Principal Investigator</span><p>Professor, Molecular Physiology &amp; Biophysics. Co-leads the UVM Cancer Center's Cancer &amp; Host Interactions Program.</p><p class="profiles"><a href="https://orcid.org/0000-0003-0392-1254">ORCID</a><a href="https://www.linkedin.com/in/jason-stumpff-59415545/">LinkedIn</a></p></div>
+      <div class="person"><img class="avatar" src="media/lindsey-alpeter.jpg" alt="Lindsey Alpeter" width="286" height="400"><h3>Lindsey Alpeter, MD</h3><span class="role">REI Fellow, Ob/Gyn</span><p>Kinesin variants linked to infertility.</p></div>
+      <div class="person"><img class="avatar" src="media/sarah-catherine-paschall.jpg" alt="Sarah-Catherine Paschall" width="313" height="400"><h3>Sarah-Catherine Paschall</h3><span class="role">PhD Student, CMB</span><p>How KIFBP controls kinesins during neuronal development.</p></div>
+      <div class="person"><img class="avatar" src="media/amila-semic.jpg" alt="Amila Šemić" width="313" height="400"><h3>Amila Šemić</h3><span class="role">PhD Student, CMB</span><p>How KIF22 mutations cause SEMDJL2.</p></div>
+      <div class="person"><img class="avatar" src="media/ethan-wagner.jpg" alt="Ethan Wagner" width="333" height="400"><h3>Ethan Wagner</h3><span class="role">PhD Student, CMB</span><p>Sensitivity and resistance to KIF18A inhibitors.</p></div>
+      <div class="person"><img class="avatar placeholder" src="media/placeholder-science.jpg" alt="Placeholder image until a headshot is added" width="400" height="499"><h3>Stephanie Miller</h3><span class="role">Medical Student Researcher</span><p>Kinesin variants linked to infertility.</p></div>
+      <div class="person"><img class="avatar" src="media/lily-kearns.jpg" alt="Lily Kearns" width="400" height="500"><h3>Lily Kearns</h3><span class="role">Master's Researcher, MMG</span><p>Microtubule organization and dynamics during neuronal differentiation.</p></div>
+      <div class="person"><img class="avatar placeholder" src="media/placeholder-science.jpg" alt="Placeholder image until a headshot is added" width="400" height="499"><h3>Kathleen Avazpour</h3><span class="role">Undergraduate</span><p>Work-study lab assistant.</p></div>
+      <div class="person"><img class="avatar placeholder" src="media/placeholder-science.jpg" alt="Placeholder image until a headshot is added" width="400" height="499"><h3>Naomi Lyons</h3><span class="role">Undergraduate Researcher</span><p>Sensitivity and resistance to KIF18A inhibitors.</p></div>
+      <div class="person"><img class="avatar" src="media/elsa-williams.jpg" alt="Elsa Williams" width="400" height="500"><h3>Elsa Williams</h3><span class="role">Undergraduate Researcher, Neuroscience</span><p>UVM STEM Scholar. Sensitivity and resistance to KIF18A inhibitors.</p></div>
+    </div>
+
+    <div class="alumni">
+      <h3>Where our alumni went</h3>
+      <p>Lab alumni have gone on to faculty positions, postdocs, PhD and medical programs, clinical practice, biotech, and industry.</p>
+      <div class="alum-table">
+        <table>
+          <thead><tr><th>Name</th><th>Now</th><th>In lab</th></tr></thead>
+          <tbody>
+            <tr class="grp"><th colspan="3">Graduate students</th></tr>
+            <tr><td>Katie Queen, PhD</td><td>Faculty, UVM Cancer Center</td><td>2019–23</td></tr>
+            <tr><td>Alex Thompson, PhD</td><td>Clinical Variant Scientist, GeneDx</td><td>2017–22</td></tr>
+            <tr><td>Leslie Sepaniac, PhD</td><td>Postdoc, University of Wisconsin</td><td>2016–21</td></tr>
+            <tr><td>Haein Kim, PhD</td><td>Business Development Officer, Stryde Research</td><td>2013–18</td></tr>
+            <tr><td>Anna Belongia, MS</td><td>Clinical Trials Coordinator, UVM</td><td>2023–24</td></tr>
+            <tr class="grp"><th colspan="3">Postdoctoral fellows</th></tr>
+            <tr><td>Katherine Schutt, PhD</td><td>Cell Biologist, Topos Bio</td><td>2020–22</td></tr>
+            <tr><td>Heidi Malaby, PhD</td><td>Team Lead, Complex Proposals and Strategic Positioning, UVM</td><td>2014–19</td></tr>
+            <tr class="grp"><th colspan="3">Clinical research fellows</th></tr>
+            <tr><td>Navin Maredia Ebrahimi, MD</td><td>Ob/Gyn, Chicago</td><td>2024–26</td></tr>
+            <tr><td>Carleigh Nesbit, MD</td><td>Physician, Boston IVF</td><td>2022–24</td></tr>
+            <tr><td>Jessica Ryniec, MD</td><td>Physician, CCRM Boston Fertility</td><td>2018–20</td></tr>
+            <tr class="grp"><th colspan="3">Staff</th></tr>
+            <tr><td>Kira Fisher</td><td>Senior Research Technician, UVM</td><td>2022–26</td></tr>
+            <tr><td>Cindy Fonseca, MS</td><td>Business owner</td><td>Staff</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h4 class="ug-head">Undergraduate researchers</h4>
+      <ul class="ug">
+        <li><b>Ava Caito</b> <span class="yrs">2024–25</span><span class="now">EMT, Boston</span></li>
+        <li><b>Lauren Tuzic</b> <span class="yrs">2024–25</span><span class="now">Graduate student, Dartmouth</span></li>
+        <li><b>Maxine Robinson</b> <span class="yrs">2023–24</span><span class="now">PhD student in Physics, Delaware State</span></li>
+        <li><b>Petra Kapsalis</b> <span class="yrs">2023–25</span><span class="now">Medical Assistant, Colorado</span></li>
+        <li><b>Olivia Budington</b> <span class="yrs">2021–23</span><span class="now">Medical Assistant, Vermont</span></li>
+        <li><b>Noah Arons</b> <span class="yrs">2021–22</span><span class="now">Veterinary student, University of Glasgow</span></li>
+        <li><b>Hannah Poquette</b> <span class="yrs">2019–22</span><span class="now">Research Technician, Green Mountain Antibodies</span></li>
+        <li><b>Jade Rigout</b> <span class="yrs">2019–20</span><span class="now">Senior Consultant, Praecipio Consulting</span></li>
+        <li><b>Samantha Provost</b> <span class="yrs">2019</span><span class="now">PhD student, University of Pennsylvania</span></li>
+        <li><b>Sarah Stevens</b> <span class="yrs">2018–21</span><span class="now">Certified Nursing Assistant</span></li>
+        <li><b>Kyra Fryling</b> <span class="yrs">2018–19</span><span class="now">Senior Associate, Pew Charitable Trusts</span></li>
+        <li><b>Sarah Vandal</b> <span class="yrs">2017–18</span><span class="now">PhD student, Dartmouth</span></li>
+        <li><b>Thea Pappas</b> <span class="yrs">2017–18</span><span class="now">Health and Wellness Coach, CommuniCare</span></li>
+        <li><b>Maria Kogan</b> <span class="yrs">2017</span><span class="now">Technical Staff, VMware</span></li>
+        <li><b>Carolyn Marquis</b> <span class="yrs">2016–19</span><span class="now">Medical student, Brown</span></li>
+        <li><b>Christopher Kruglik</b> <span class="yrs">2016–19</span><span class="now">Medical student, UVM</span></li>
+        <li><b>Lisa Wood</b> <span class="yrs">2016–18</span><span class="now">PhD student in Cancer Biology, CU Denver</span></li>
+        <li><b>Jillian Kelly</b> <span class="yrs">2016–17</span><span class="now">Medical Laboratory Scientist, UVM</span></li>
+        <li><b>Dana Messinger</b> <span class="yrs">2014–17</span><span class="now">PhD student in Cancer Biology, University of Michigan</span></li>
+        <li><b>Julia Torvi</b> <span class="yrs">2014–15</span><span class="now">PhD, UC Berkeley; Scientist, Allen Institute</span></li>
+        <li><b>Cooper Pearson</b> <span class="yrs">2014</span><span class="now">Senior Software Engineer, Optum</span></li>
+        <li><b>Samantha Bissonette</b> <span class="yrs">2013–14</span><span class="now">Emergency Medicine Resident, Dartmouth</span></li>
+        <li><b>Sean Lenahan</b> <span class="yrs">2012–16</span><span class="now">Postdoc, Harvard</span></li>
+      </ul>
+    </div>
+
+    <div class="collab">
+      <div>
+        <h3>Collaborators</h3>
+        <ul class="two">
+          <li>Alan Howe <span>· UVM</span></li>
+          <li>John Salogiannis <span>· UVM</span></li>
+          <li>Mike Cianfrocco <span>· Michigan</span></li>
+          <li>Kristen Verhey <span>· Michigan</span></li>
+          <li>Laura Reinholdt <span>· Jackson Laboratory</span></li>
+          <li>Karen Schindler <span>· Rutgers</span></li>
+          <li>Steve Rosenfeld <span>· Mayo Clinic</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Industry partners</h3>
+        <ul><li>Apeiron Therapeutics</li><li>Volastra Therapeutics</li></ul>
+      </div>
+      <div>
+        <h3>Funding</h3>
+        <ul><li>NIGMS R35 GM144133</li><li>Juckett Faculty Scholar Award</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="publications">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Publications</p>
+      <h2>Recent papers and preprints</h2>
+      <p>Lab members in bold. Full list on <a href="https://www.ncbi.nlm.nih.gov/sites/myncbi/jason.stumpff.1/bibliography/44447689/public/?sortby=pubDate&amp;sdirection=descending">PubMed</a>.</p>
+    </div>
+    <div class="pubs">
+      <div class="year"><span class="y">2026</span><ol>
+        <li class="pub"><p class="t"><a href="https://doi.org/10.1073/pnas.2602415123">A phosphorylation switch governs KIF11's mechanical output during mitosis</a></p><p class="a"><b>Šemić A</b>, Reddy BJN, Muretta JM, <b>Vandal SE</b>, <b>Thompson AF</b>, <b>Fonseca CL</b>, Rosenfeld SS, Gross SP, <b>Stumpff J</b></p><p class="j"><i>PNAS</i> 123(33): e2602415123</p></li>
+        <li class="pub"><p class="t"><a href="https://doi.org/10.1091/mbc.e26-03-0126">Novel KIF22 variants disrupt mitosis in human chondrocytes and expand SEMDJL2 mechanisms</a></p><p class="a"><b>Šemić A</b>, Chan KYY, Bernardi P, Silveira KC, Silveira C, Cavalcanti DP, Kannu P, <b>Stumpff J</b></p><p class="j"><i>Mol Biol Cell</i> 37(9): ar84</p></li>
+        <li class="pub"><p class="t"><a href="https://doi.org/10.64898/2026.07.17.739260">A systems-level proteomic analysis identifies kinesin targets of KIFBP during neuronal development</a></p><p class="a"><b>Paschall S</b>, Blasius TL, Missman A, Rodriguez P, Cianfrocco MA, Verhey KJ, <b>Stumpff J</b></p><p class="j"><i>bioRxiv</i><span class="badge">preprint</span></p></li>
+        <li class="pub"><p class="t"><a href="https://doi.org/10.64898/2026.04.15.718686">KIF18A maintains kinetochore-microtubule attachments in CIN cells by limiting microtubule polymerization</a><span class="pill">CIN</span></p><p class="a"><b>Fonseca C</b>, <b>Fisher K</b>, <b>Wagner E</b>, <b>Paschall S</b>, <b>Kim H</b>, <b>Stumpff J</b></p><p class="j"><i>bioRxiv</i><span class="badge">preprint</span></p></li>
+        <li class="pub"><p class="t"><a href="https://doi.org/10.1016/j.cub.2025.12.056">Meiotic spindle mechanics: Sensing a disturbance in the force</a></p><p class="a"><b>Šemić A</b>, <b>Stumpff J</b></p><p class="j"><i>Curr Biol</i> 36(4): R140–R143 · Dispatch</p></li>
+      </ol></div>
+      <div class="year"><span class="y">2025</span><ol>
+        <li class="pub"><p class="t"><a href="https://doi.org/10.1038/s41467-024-55300-z">Targeting chromosomally unstable tumors with a selective KIF18A inhibitor</a><span class="pill">CIN</span></p><p class="a">Phillips AF, Zhang R, … <b>Queen KA</b>, Racela AR, <b>Stumpff J</b>, … Eng CH</p><p class="j"><i>Nat Commun</i> 16: 307</p></li>
+        <li class="pub"><p class="t"><a href="https://doi.org/10.1038/s41598-025-08766-w">Anapc5 and Anapc7 as genetic modifiers of KIF18A function in fertility and mitotic progression</a></p><p class="a"><b>Nesbit C</b>, Martin W, Czechanski A, Byers C, Raghupathy N, Ferraj A, <b>Stumpff J</b>, Reinholdt L</p><p class="j"><i>Sci Rep</i> 15: 23046</p></li>
+        <li class="pub"><p class="t"><a href="https://doi.org/10.1016/j.cub.2024.11.035">The histone H3.3 K27M mutation suppresses Ser31 phosphorylation and mitotic fidelity, which can directly drive gliomagenesis</a></p><p class="a">Day CA, Grigore F, … <b>Sepaniac L</b>, <b>Stumpff J</b>, … Hinchcliffe EH</p><p class="j"><i>Curr Biol</i> 35(2): 354–362</p></li>
+      </ol></div>
+      <div class="year"><span class="y">2024</span><ol>
+        <li class="pub"><p class="t"><a href="https://doi.org/10.3389/fmolb.2024.1328077">Identification of the KIF18A alpha-4 helix as a therapeutic target for chromosomally unstable tumor cells</a><span class="pill">CIN</span></p><p class="a"><b>Schutt KL</b>, <b>Queen KA</b>, <b>Fisher K</b>, <b>Budington O</b>, Mao W, Liu W, Gu X, Xiao Y, Aswad F, Joseph J, <b>Stumpff J</b></p><p class="j"><i>Front Mol Biosci</i> 11: 1328077</p></li>
+        <li class="pub"><p class="t"><a href="https://doi.org/10.1091/mbc.e23-05-0167">Modification of the neck-linker of KIF18A alters microtubule subpopulation preference</a></p><p class="a"><b>Queen KA</b>, Cario A, Berger CL, <b>Stumpff J</b></p><p class="j"><i>Mol Biol Cell</i> 35(1): ar3</p></li>
+      </ol></div>
+      <div class="year"><span class="y">2022</span><ol>
+        <li class="pub"><p class="t"><a href="https://doi.org/10.7554/elife.78653">Pathogenic mutations in the chromokinesin KIF22 disrupt anaphase chromosome segregation</a></p><p class="a"><b>Thompson AF</b>, Blackburn PR, <b>Arons NS</b>, <b>Stevens SN</b>, Babovic-Vuksanovic D, Lian JB, Klee EW, <b>Stumpff J</b></p><p class="j"><i>eLife</i> 11: e78653</p></li>
+      </ol></div>
+      <div class="year"><span class="y">Earlier</span><ol>
+        <li class="pub"><p class="t"><a href="https://www.nature.com/articles/s41467-021-21447-2">Chromosomally unstable tumor cells specifically require KIF18A for proliferation</a><span class="pill">CIN</span></p><p class="j"><i>Nat Commun</i> 2021</p></li>
+        <li class="pub"><p class="t"><a href="https://www.nature.com/articles/s41586-020-03114-6">Selective vulnerability of aneuploid human cancer cells to inhibition of the spindle assembly checkpoint</a><span class="pill">CIN</span></p><p class="j"><i>Nature</i> 2021</p></li>
+        <li class="pub"><p class="t"><a href="https://pubmed.ncbi.nlm.nih.gov/18267093/">The kinesin-8 motor Kif18A suppresses kinetochore movements to control mitotic chromosome alignment</a></p><p class="j"><i>Dev Cell</i> 2008</p></li>
+      </ol></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="gallery">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Gallery</p>
+      <h2>Kinesins at work</h2>
+      <p>Cell art and time-lapse movies from the lab, from single motors to differentiating cells.</p>
+    </div>
+    <div class="subsection" id="art">
+      <div class="subhead"><h3>Cell Art</h3><p>Images made by lab members, many created as journal cover submissions. Select an image to view it full size.</p></div>
+      <div class="art-rows">
+      <div class="art">
+        <figure style="flex: 1.652 1 0"><button type="button" class="art-open" data-full="media/art-kymograph-stumpff-2012.jpg" data-caption="Spindle kymograph. EB3-labeled microtubule tips and CENP-B-labeled kinetochores in a metaphase spindle. Jason Stumpff, 2012." aria-label="View spindle kymograph full size"><img src="media/art-kymograph-stumpff-2012-thumb.jpg" alt="Kymograph of a metaphase spindle: cyan microtubule tracks on either side of a braided pink and yellow band of kinetochore paths" width="900" height="545" loading="lazy"></button><figcaption><b>Spindle kymograph.</b> EB3-labeled microtubule tips and CENP-B-labeled kinetochores in a metaphase spindle. <span class="credit">Jason Stumpff, 2012</span></figcaption></figure>
+        <figure style="flex: 1 1 0"><button type="button" class="art-open" data-full="media/art-monopolar-fonseca-2013.jpg" data-caption="Monopolar spindle. Microtubules, kinetochores, and chromosomes labeled. Cindy Fonseca, 2013." aria-label="View monopolar spindle full size"><img src="media/art-monopolar-fonseca-2013-thumb.jpg" alt="Monopolar spindle: red microtubules radiate from the center to green kinetochores, surrounded by blue chromosomes" width="900" height="900" loading="lazy"></button><figcaption><b>Monopolar spindle.</b> Microtubules, kinetochores, and chromosomes labeled. <span class="credit">Cindy Fonseca, 2013</span></figcaption></figure>
+        <figure style="flex: 0.778 1 0"><button type="button" class="art-open" data-full="media/art-rbc-fonseca-2019.jpg" data-caption="Micronucleated red blood cells. Red blood cells from a Kif18a mutant mouse. Cindy Fonseca, 2019." aria-label="View micronucleated red blood cells full size"><img src="media/art-rbc-fonseca-2019-thumb.jpg" alt="Field of gray red blood cells with a few small green micronuclei" width="700" height="900" loading="lazy"></button><figcaption><b>Micronucleated red blood cells.</b> Red blood cells from a Kif18a mutant mouse. <span class="credit">Cindy Fonseca, 2019</span></figcaption></figure>
+      </div>
+      <div class="art">
+        <figure style="flex: 1 1 0"><button type="button" class="art-open" data-full="media/art-liver-sepaniac-2021.jpg" data-caption="Mouse liver. Liver tissue stained for lamin A. Leslie Sepaniac, 2021." aria-label="View mouse liver full size"><img src="media/art-liver-sepaniac-2021-thumb.jpg" alt="Dense field of mouse liver cells with green nuclear rims and blue nuclei" width="900" height="900" loading="lazy"></button><figcaption><b>Mouse liver.</b> Liver tissue stained for lamin A. <span class="credit">Leslie Sepaniac, 2021</span></figcaption></figure>
+        <figure style="flex: 1.661 1 0"><button type="button" class="art-open" data-full="media/art-recongression-thompson-2022.jpg" data-caption="Chromosome recongression. Cells expressing KIF22 with SEMDJL2-derived mutations. Alex Thompson, 2022." aria-label="View chromosome recongression full size"><img src="media/art-recongression-thompson-2022-thumb.jpg" alt="Three rows of time-lapse frames of dividing cells, chromosomes in green and spindles in magenta" width="900" height="542" loading="lazy"></button><figcaption><b>Chromosome recongression.</b> Cells expressing KIF22 with SEMDJL2-derived mutations. <span class="credit">Alex Thompson, 2022</span></figcaption></figure>
+      </div>
+      <div class="art">
+        <figure style="flex: 1.805 1 0"><button type="button" class="art-open" data-full="media/art-kaleidoscope-thompson-2022.jpg" data-caption="Monopole kaleidoscope. Alex Thompson, 2022." aria-label="View monopole kaleidoscope full size"><img src="media/art-kaleidoscope-thompson-2022-thumb.jpg" alt="Kaleidoscope pattern built from repeated images of blue and magenta monopolar spindles" width="900" height="499" loading="lazy"></button><figcaption><b>Monopole kaleidoscope.</b> <span class="credit">Alex Thompson, 2022</span></figcaption></figure>
+        <figure style="flex: 1.778 1 0"><button type="button" class="art-open" data-full="media/art-ptm-queen-2023.jpg" data-caption="KIF18A PTM mutants. Localization of KIF18A wild type and S357A and S357D mutants in mitotic spindles. Katie Queen, 2023." aria-label="View kif18a ptm mutants full size"><img src="media/art-ptm-queen-2023-thumb.jpg" alt="Grayscale spindles labeled KIF18A WT, KIF18A S357A, and KIF18A S357D" width="900" height="506" loading="lazy"></button><figcaption><b>KIF18A PTM mutants.</b> Localization of KIF18A wild type and S357A and S357D mutants in mitotic spindles. <span class="credit">Katie Queen, 2023</span></figcaption></figure>
+      </div>
+      <div class="art">
+        <figure style="flex: 1.267 1 0"><button type="button" class="art-open" data-full="media/art-beaded-semic-2026.jpg" data-caption="Beaded mitosis. Beaded embroidery inspired by an image of a cell undergoing multipolar mitosis. Amila Šemić, 2026." aria-label="View beaded mitosis full size"><img src="media/art-beaded-semic-2026-thumb.jpg" alt="Beaded embroidery in an embroidery hoop: green and blue bugle beads form a branching multipolar spindle on dark fabric" width="900" height="710" loading="lazy"></button><figcaption><b>Beaded mitosis.</b> Beaded embroidery inspired by an image of a cell undergoing multipolar mitosis. <span class="credit">Amila Šemić, 2026</span></figcaption></figure>
+        <figure style="flex: 1.264 1 0"><button type="button" class="art-open" data-full="media/art-tiled-monopoles-semic-2026.jpg" data-caption="Tiled monopoles. Amila Šemić, 2026." aria-label="View tiled monopoles full size"><img src="media/art-tiled-monopoles-semic-2026-thumb.jpg" alt="Repeating hexagonal tiles, each holding a magenta and blue monopolar spindle, separated by white" width="900" height="712" loading="lazy"></button><figcaption><b>Tiled monopoles.</b> <span class="credit">Amila Šemić, 2026</span></figcaption></figure>
+      </div>
+      <div class="art">
+        <figure style="flex: 2.459 1 0"><button type="button" class="art-open" data-full="media/art-segregation-semic-2026.jpg" data-caption="Chromosome segregation in chondrocytes. Chondrocytes expressing WT or SEMDJL2-mutant KIF22. Amila Šemić, 2026." aria-label="View chromosome segregation in chondrocytes full size"><img src="media/art-segregation-semic-2026-thumb.jpg" alt="Two rows of time-lapse frames: wild-type chondrocytes separate their chromosomes, while mutant cells fail to elongate the spindle" width="900" height="366" loading="lazy"></button><figcaption><b>Chromosome segregation in chondrocytes.</b> Chondrocytes expressing WT or SEMDJL2-mutant KIF22. <span class="credit">Amila Šemić, 2026</span></figcaption></figure>
+      </div>
+      </div>
+    </div>
+    <div class="subsection" id="movies">
+      <div class="subhead"><h3>Movies</h3></div>
+    <div class="reel">
+      <div class="reel-row">
+        <figure style="flex: 1 1 0"><video src="media/single-molecule.mp4" width="512" height="512" autoplay muted loop playsinline preload="metadata" aria-label="Single kinesin molecules walking along microtubules"></video><figcaption><b>Single motors.</b> GFP-tagged kinesin molecules (green) walking along dynamic microtubules (red). <span class="credit">Jason Stumpff, 2012</span></figcaption></figure>
+        <figure style="flex: 1 1 0"><video src="media/art-gliding-queen-2023.mp4" poster="media/art-gliding-queen-2023-poster.jpg" width="512" height="512" autoplay muted loop playsinline preload="metadata" aria-label="Microtubules gliding across a surface coated with KIF18A motors"></video><figcaption><b>Microtubule gliding.</b> KIF18A-driven microtubule gliding motility. <span class="credit">Katie Queen, 2023</span></figcaption></figure>
+      </div>
+      <div class="reel-row">
+        <figure style="flex: 1.5 1 0"><video src="media/kif11-spindle-assembly-semic-2026.mp4" width="558" height="372" autoplay muted loop playsinline preload="metadata" aria-label="Six panels of RPE1 cells assembling bipolar spindles after monastrol washout"></video><figcaption><b>Spindle assembly.</b> Spindle assembly after monastrol washout in RPE1 cells expressing KIF11 variants. <span class="credit">Amila Šemić, 2026</span></figcaption></figure>
+        <figure style="flex: 0.333 1 0"><video src="media/kif22-chondrocytes-semic-2026.mp4" width="360" height="1080" autoplay muted loop playsinline preload="metadata" aria-label="Three stacked panels of dividing chondrocytes, chromosomes in green and spindles in magenta"></video><figcaption><b>Chondrocyte division.</b> Dividing chondrocytes expressing KIF22 E222Q or P144T display chromosome recongression. <span class="credit">Amila Šemić, 2026</span></figcaption></figure>
+      </div>
+      <div class="reel-row">
+        <figure style="flex: 3 1 0"><video src="media/kif22-recongression-thompson-2023.mp4" width="1400" height="466" autoplay muted loop playsinline preload="metadata" aria-label="Three HeLa cells dividing: wild-type KIF22 separates chromosomes, while R149Q and V475G mutants pull them back together"></video><figcaption><b>Chromosome recongression.</b> Expression of KIF22 with SEMDJL2 mutations in HeLa cells leads to chromosome recongression. <span class="credit">Alex Thompson, 2023</span></figcaption></figure>
+      </div>
+      <div class="reel-row">
+        <figure style="flex: 3 1 0"><video src="media/kif22-anaphase-thompson-2023.mp4" width="1200" height="400" autoplay muted loop playsinline preload="metadata" aria-label="Three HeLa cells in anaphase with spindle poles marked, expressing wild-type, R149Q, or V475G KIF22"></video><figcaption><b>Anaphase movements.</b> Anaphase movements in HeLa cells expressing WT and mutant KIF22. <span class="credit">Alex Thompson, 2023</span></figcaption></figure>
+      </div>
+      <div class="reel-row">
+        <figure style="flex: 3 1 0"><video src="media/kif22-cytokinesis-thompson-2023.mp4" width="1100" height="366" autoplay muted loop playsinline preload="metadata" aria-label="HeLa cells with labeled membranes dividing over several hours, expressing wild-type, R149Q, or V475G KIF22"></video><figcaption><b>Cytokinesis.</b> Cytokinesis in HeLa cells expressing WT and mutant KIF22. <span class="credit">Alex Thompson, 2023</span></figcaption></figure>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section class="join-band" id="join">
+  <div class="wrap">
+    <p class="eyebrow">Join us</p>
+    <h2>Looking for a lab to do your research in?</h2>
+    <p class="lede">Trainees here own their projects, from the first question to the first-author paper. Each project connects a basic question about how motors work to a disease that affects real patients.</p>
+    <div class="paths">
+      <div class="path"><h3>Prospective PhD students</h3><p>Apply through the <a href="https://www.uvm.edu/cmb">Cellular, Molecular &amp; Biomedical Sciences</a> program, then reach out about a rotation.</p></div>
+      <div class="path"><h3>Current UVM grad students</h3><p>Email Jason to talk about rotation projects in any of the four research areas.</p></div>
+      <div class="path"><h3>Postdocs</h3><p>Send a CV, a short statement of interests, and names of three references.</p></div>
+      <div class="path"><h3>Undergraduates</h3><p>We host undergraduates for multi-year research and honors thesis projects. Email with your schedule and interests.</p></div>
+    </div>
+    <div class="mentoring">
+      <div><h3>Training built around your goals</h3><p>Individual training plans tied to the career you want. Alumni work in academia, medicine, biotech, and science communication.</p></div>
+      <div><h3>Your project, your decisions</h3><p>Projects are designed together, with students leading the thinking, experimental decisions, and direction.</p></div>
+      <div><h3>Fellowship success</h3><p>Trainees have won fellowships from NIH (F31), NSF (GRFP), the Department of Defense, the Vermont Space Grant Consortium, and the U.S. Department of Education.</p></div>
+      <div><h3>Present your research</h3><p>Trainees frequently present at international meetings such as ASCB and Gordon Research Conferences.</p></div>
+      <div><h3>Dedicated mentoring</h3><p>Jason received the 2024 Research Mentor Award from the UVM Larner College of Medicine.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="news">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">News</p><h2>Lately</h2></div>
+    <div class="news"><ul>
+      <li><span class="d">Aug 2026</span><span>Amila's paper on the phosphorylation switch that controls KIF11 force output is out in <i>PNAS</i>.</span></li>
+      <li><span class="d">Aug 2026</span><span>New KIF22 variants from SEMDJL2 patients characterized in human chondrocytes, published in <i>MBoC</i>.</span></li>
+      <li><span class="d">Jul 2026</span><span>Preprint from Sarah-Catherine: KIFBP's kinesin targets during neuronal development.</span></li>
+      <li><span class="d">Apr 2026</span><span>Preprint: how KIF18A keeps kinetochores attached in chromosomally unstable cancer cells.</span></li>
+    </ul></div>
+  </div>
+</section>
+
+<section class="block" id="contact">
+  <div class="wrap contact">
+    <div><h3>Email</h3><span class="copy"><code id="email">jstumpff@uvm.edu</code><button type="button" id="copy-btn">Copy</button></span><p class="profiles"><a href="https://orcid.org/0000-0003-0392-1254">ORCID</a><a href="https://www.linkedin.com/in/jason-stumpff-59415545/">LinkedIn</a></p></div>
+    <div><h3>Lab</h3><p>Health Science Research Facility, Room 105<br>149 Beaumont Avenue<br>Burlington, VT 05405</p></div>
+    <div><h3>Affiliations</h3><p><a href="https://www.uvm.edu/larnermed/mpb">Molecular Physiology &amp; Biophysics</a><br><a href="https://www.uvm.edu/larnermed/uvmcancercenter">UVM Cancer Center</a><br><a href="https://www.uvm.edu/cmb">CMB Graduate Program</a></p></div>
+  </div>
+</section>
+
+<div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Full-size image">
+  <button type="button" class="lightbox-close" id="lightbox-close">Close</button>
+  <figure><img id="lightbox-img" src="" alt=""><figcaption id="lightbox-cap"></figcaption></figure>
+</div>
+
+<footer><div class="wrap">Stumpff Lab · University of Vermont Larner College of Medicine</div></footer>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) document.querySelectorAll('video[autoplay]').forEach(v => { v.removeAttribute('autoplay'); v.controls = true; try { v.pause(); } catch (e) {} });
+  const rand = (a, b) => a + Math.random() * (b - a);
+
+  // ---- CIN spindle model ----
+  const cv = document.getElementById('spindle');
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const PX = 40;
+  const poleL = { x: 110, y: H / 2 }, poleR = { x: W - 110, y: H / 2 };
+  const cx = W / 2;
+  const N = 9;
+  const polarIdx = new Set([0, 4, 7]);
+  const chroms = Array.from({ length: N }, (_, i) => ({
+    y: H / 2 + (i - (N - 1) / 2) * 44 + rand(-6, 6),
+    phase: rand(0, Math.PI * 2), period: rand(4, 7.5), drift: rand(-1, 1),
+    tilt: rand(-0.12, 0.12), len: rand(30, 46),
+    polarSide: Math.random() < .5 ? -1 : 1, p: 0
+  }));
+  const astral = Array.from({ length: 70 }, () => ({ side: Math.random() < .5 ? -1 : 1, ang: rand(-1.25, 1.25), len: rand(120, 300), a: rand(.06, .22) }));
+  let mode = 0, amp = 0.35, curAmp = 0.35;
+  const polarEl = document.getElementById('polar');
+  if (!CanvasRenderingContext2D.prototype.roundRect) CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h) { this.rect(x, y, w, h); };
+  const line = (x1, y1, x2, y2, c, w) => { ctx.strokeStyle = c; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); };
+
+  function frame(t) {
+    const s = t / 1000;
+    curAmp += (amp - curAmp) * 0.03;
+    ctx.fillStyle = '#05080a'; ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter';
+    for (const m of astral) {
+      const p = m.side < 0 ? poleL : poleR, d = m.side < 0 ? 1 : -1;
+      line(p.x, p.y, p.x + Math.cos(m.ang) * m.len * d, p.y + Math.sin(m.ang) * m.len, `rgba(110,220,150,${m.a})`, 1.4);
+    }
+    let polar = 0;
+    chroms.forEach((c, i) => {
+      const target = (mode === 2 && polarIdx.has(i)) ? 1 : 0;
+      c.p += (target - c.p) * (reduce ? 1 : 0.02);
+      if (c.p > 0.5) polar++;
+      const osc = curAmp * PX * (Math.sin(2 * Math.PI * s / c.period + c.phase) + 0.35 * Math.sin(2 * Math.PI * s / (c.period * .43) + c.phase * 2)) + c.drift * curAmp * 14;
+      const pole = c.polarSide < 0 ? poleL : poleR;
+      const px = pole.x - c.polarSide * 70, py = pole.y + (c.y - H / 2) * 0.55;
+      const x = (cx + osc) * (1 - c.p) + px * c.p;
+      const y = c.y * (1 - c.p) + py * c.p;
+      const gap = 9;
+      const kL = { x: x - gap, y }, kR = { x: x + gap, y };
+      const att = 1 - c.p;
+      for (let k = -1; k <= 1; k++) {
+        if (att > 0.05) {
+          line(poleL.x, poleL.y, kL.x, kL.y + k * 3, `rgba(120,235,160,${.38 * att})`, 1.6);
+          line(poleR.x, poleR.y, kR.x, kR.y + k * 3, `rgba(120,235,160,${.38 * att})`, 1.6);
+        }
+      }
+      ctx.save(); ctx.translate(x, y); ctx.rotate(c.tilt + c.p * 0.9);
+      ctx.fillStyle = 'rgba(230,80,190,.85)';
+      for (const sx of [-6.5, 6.5]) { ctx.beginPath(); ctx.roundRect(sx - 5, -c.len / 2, 10, c.len, 5); ctx.fill(); }
+      ctx.restore();
+      ctx.fillStyle = c.p > 0.5 ? 'rgba(255,120,90,.95)' : 'rgba(255,214,90,.95)';
+      for (const k of [kL, kR]) { ctx.beginPath(); ctx.arc(k.x, k.y, 3.2, 0, Math.PI * 2); ctx.fill(); }
+    });
+    for (const p of [poleL, poleR]) {
+      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 26);
+      g.addColorStop(0, 'rgba(200,255,220,.9)'); g.addColorStop(1, 'rgba(110,220,150,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, 26, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = '#e8eeea'; ctx.fillRect(W - 40 - 5 * PX, H - 34, 5 * PX, 5);
+    ctx.font = '500 18px "IBM Plex Mono", monospace'; ctx.textAlign = 'right'; ctx.fillText('5 µm', W - 40, H - 44);
+    ctx.textAlign = 'left'; ctx.font = '500 16px "IBM Plex Mono", monospace';
+    ctx.fillStyle = 'rgba(150,235,180,.9)'; ctx.fillText('microtubules', 30, 36);
+    ctx.fillStyle = 'rgba(230,80,190,.95)'; ctx.fillText('DNA', 158, 36);
+    ctx.fillStyle = 'rgba(255,214,90,.95)'; ctx.fillText('kinetochores', 206, 36);
+    polarEl.textContent = polar;
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  const btns = document.querySelectorAll('.toggle button');
+  btns.forEach(b => b.addEventListener('click', () => {
+    mode = +b.dataset.mode;
+    amp = mode === 0 ? 0.35 : 1.4;
+    btns.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    if (reduce) { curAmp = amp; frame(3000); }
+  }));
+  if (reduce) frame(3000); else requestAnimationFrame(frame);
+
+
+  // ---- art lightbox ----
+  const lb = document.getElementById('lightbox'), lbImg = document.getElementById('lightbox-img'), lbCap = document.getElementById('lightbox-cap'), lbClose = document.getElementById('lightbox-close');
+  let lastBtn = null;
+  const closeLb = () => { lb.hidden = true; lbImg.src = ''; if (lastBtn) lastBtn.focus(); };
+  document.querySelectorAll('.art-open').forEach(b => b.addEventListener('click', () => {
+    lastBtn = b; lbImg.src = b.dataset.full; lbImg.alt = b.querySelector('img').alt; lbCap.textContent = b.dataset.caption;
+    lb.hidden = false; lbClose.focus();
+  }));
+  lbClose.addEventListener('click', closeLb);
+  lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
+
+  // ---- copy email ----
+  const btn = document.getElementById('copy-btn');
+  const emailEl = document.getElementById('email');
+  const selectIt = () => { const r = document.createRange(); r.selectNodeContents(emailEl); const s = getSelection(); s.removeAllRanges(); s.addRange(r); };
+  btn.addEventListener('click', () => {
+    try {
+      navigator.clipboard.writeText(emailEl.textContent).then(() => { btn.textContent = 'Copied'; setTimeout(() => btn.textContent = 'Copy', 1500); }, selectIt);
+    } catch (e) { selectIt(); }
+  });
+})();
+</script>
+
+</body>
+</html>
