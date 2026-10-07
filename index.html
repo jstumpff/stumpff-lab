@@ -50,7 +50,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
 h1, h2, h3, h4 { font-family: var(--display); line-height: 1.15; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
 p { margin: 0; }
-img, video { max-width: 100%; display: block; }
+img, video { max-width: 100%; height: auto; display: block; }
 .wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; }
 .eyebrow { font-family: var(--display); font-weight: 600; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
 .eyebrow-link { color: inherit; text-decoration-color: color-mix(in srgb, var(--gold) 45%, transparent); }
@@ -97,7 +97,7 @@ section.block { padding-block: 72px; border-top: 1px solid var(--line); }
 /* project areas */
 .projects { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
 .project { display: grid; grid-template-rows: auto 1fr; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; min-width: 0; }
-.project img { width: 100%; aspect-ratio: 16 / 10; object-fit: contain; background: var(--field); }
+.project img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: contain; background: var(--field); }
 .project .body { display: grid; gap: 8px; align-content: start; padding: 20px 22px 22px; min-width: 0; }
 .project .area { font-family: var(--display); font-weight: 700; font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
 .project h3 { font-size: 20px; font-weight: 700; }
@@ -157,7 +157,7 @@ section.block { padding-block: 72px; border-top: 1px solid var(--line); }
 .labphoto figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }
 .people { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 28px 24px; }
 .person { display: grid; gap: 4px; align-content: start; }
-.avatar { width: 100%; aspect-ratio: 1; max-width: 100%; border-radius: 10px; background: var(--accent-soft); display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 34px; color: var(--accent); margin-bottom: 8px; object-fit: cover; }
+.avatar { width: 100%; height: auto; aspect-ratio: 1; max-width: 100%; border-radius: 10px; background: var(--accent-soft); display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: 34px; color: var(--accent); margin-bottom: 8px; object-fit: cover; }
 .person h3 { font-size: 17.5px; font-weight: 700; }
 .person .role { font-family: var(--display); font-size: 14px; color: var(--gold); font-weight: 600; }
 .person p { font-size: 14.5px; color: var(--muted); }
