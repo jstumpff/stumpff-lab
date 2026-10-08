@@ -321,6 +321,10 @@ section.block { padding-block: 72px; border-top: 1px solid var(--line); }
 @media (prefers-reduced-motion: reduce) { .art-open img { transition: none; } }
 @media (max-width: 640px) { .reel-row { flex-direction: column; } .reel-row figure { flex: none !important; width: 100%; } .reel-row video[height="1080"] { max-height: 70vh; width: auto; margin: 0 auto; } .art { flex-direction: column; } .art figure { flex: none !important; width: 100%; } }
 
+.movies-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; max-width: none; }
+.motion-toggle { font-family: var(--display); font-weight: 600; font-size: 14px; color: var(--accent); background: transparent; border: 1.5px solid var(--accent); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.motion-toggle:hover { background: var(--accent-soft); }
+.motion-toggle[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
 /* join */
 .join-band { background: var(--band); color: var(--band-ink); padding-block: 80px; }
 .join-band .eyebrow { color: #e0b44a; }
@@ -359,6 +363,28 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
   .project img { aspect-ratio: 16 / 10; }
   .year, .news li { grid-template-columns: 1fr; gap: 6px; }
   .collab ul.two { grid-template-columns: 1fr; }
+}
+
+/* phones: compact nav, two-up people and art */
+@media (max-width: 640px) {
+  .nav .wrap { flex-wrap: nowrap; flex-direction: column; align-items: stretch; gap: 6px; padding-block: 10px 8px; }
+  .brand small { display: none; }
+  .nav ul { flex-wrap: nowrap; overflow-x: auto; gap: 18px; padding-bottom: 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .nav ul::-webkit-scrollbar { display: none; }
+  .nav li { flex: none; }
+  html { scroll-padding-top: 84px; }
+  .people { grid-template-columns: 1fr 1fr; gap: 22px 14px; }
+  .person h3 { font-size: 15.5px; }
+  .person .role { font-size: 13px; }
+  .person p { font-size: 13.5px; }
+  .art-rows { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 12px; }
+  .art-rows .art { display: contents !important; }
+  .art-rows .art figure { width: auto !important; align-content: start; }
+  .art-rows .art figure:only-child { grid-column: 1 / -1; }
+  .art-open { aspect-ratio: 1; display: grid; place-items: center; }
+  .art-rows .art figure:only-child .art-open { aspect-ratio: auto; }
+  .art-open img { width: 100%; height: 100%; object-fit: contain; }
+  .art figcaption { font-size: 13px; }
 }
 </style>
 </head>
@@ -700,7 +726,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
       </div>
     </div>
     <div class="subsection" id="movies">
-      <div class="subhead"><h3>Movies</h3></div>
+      <div class="subhead movies-head"><h3>Movies</h3><button type="button" class="motion-toggle" id="motion-toggle" aria-pressed="false">Pause movies</button></div>
     <div class="reel">
       <div class="reel-row">
         <figure style="flex: 1 1 0"><video src="media/single-molecule.mp4" width="512" height="512" autoplay muted loop playsinline preload="metadata" aria-label="Single kinesin molecules walking along microtubules"></video><figcaption><b>Single motors.</b> GFP-tagged kinesin molecules (green) walking along dynamic microtubules (red). <span class="credit">Jason Stumpff, 2012</span></figcaption></figure>
@@ -879,6 +905,18 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
   lbClose.addEventListener('click', closeLb);
   lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
+
+
+  // ---- pause / play all movies ----
+  const mt = document.getElementById('motion-toggle');
+  const vids = () => [...document.querySelectorAll('video')];
+  const setPaused = paused => {
+    vids().forEach(v => { try { paused ? v.pause() : v.play().catch(() => {}); } catch (e) {} });
+    mt.setAttribute('aria-pressed', String(paused));
+    mt.textContent = paused ? 'Play movies' : 'Pause movies';
+  };
+  if (reduce) setPaused(true);
+  mt.addEventListener('click', () => setPaused(mt.getAttribute('aria-pressed') !== 'true'));
 
   // ---- copy email ----
   const btn = document.getElementById('copy-btn');
