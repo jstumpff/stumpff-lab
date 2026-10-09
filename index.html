@@ -547,7 +547,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
         </div>
         <div class="motor-frame kin-frame" id="kin-panel" role="tabpanel">
           <canvas id="kin-anim" width="900" height="380" role="img" aria-label="Animations of three proteins the lab studies. KIF22 pushes chromosome arms away from spindle poles and normally switches off in anaphase; a disease variant stays on. KIF11 slides antiparallel microtubules apart to separate spindle poles; with an inhibitor the spindle stays monopolar. KIFBP binds kinesin motor heads and keeps them off microtubules; a button shows loss of KIFBP, as in Goldberg-Shprintzen syndrome."></canvas>
-          <div class="kin-ctrls"><button type="button" class="kin-btn" id="kin-variant">Show disease variant</button><button type="button" class="kin-btn" id="kin-pause" aria-pressed="false">Pause</button></div>
+          <div class="kin-ctrls"><button type="button" class="kin-btn" id="kin-variant">Show disease variant (SEMDJL2)</button><button type="button" class="kin-btn" id="kin-pause" aria-pressed="false">Pause</button></div>
         </div>
         <figcaption>
           <p class="kin-cap" data-scene="kif22"><b>KIF22</b> is a chromokinesin. It binds chromosome arms and walks toward microtubule plus ends, pushing the arms away from the spindle poles. It normally switches off at anaphase. Variants that cause the skeletal disorder SEMDJL2 keep it switched on. Chromosomes still move to the poles (anaphase A), but the spindle poles, after starting to separate (anaphase B), move back to where they started, and the chromosomes come back together in the middle (recongression). This can lead to cytokinesis failure. <a href="https://doi.org/10.7554/elife.78653">Thompson et al., <i>eLife</i> 2022</a>; <a href="https://doi.org/10.1091/mbc.e26-03-0126">Šemić et al., <i>MBoC</i> 2026</a>.</p>
@@ -1342,7 +1342,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
     // ================= KIF22 =================
     const k22 = {
       name: 'kif22', mutant: false, t: 0,
-      toggleLabel() { return this.mutant ? 'Show normal KIF22' : 'Show disease variant'; },
+      toggleLabel() { return this.mutant ? 'Show normal KIF22' : 'Show disease variant (SEMDJL2)'; },
       toggle() { this.mutant = !this.mutant; this.reset(); },
       reset() { this.t = 0; },
       update(dt) { this.t += dt; if (this.t > 13.2) this.t = 0; },
