@@ -1210,12 +1210,12 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
         const a = ease((t - ANA) / 4.2);                  // anaphase progress
         const fadeIn = Math.min(1, t / .6), fadeOut = Math.min(1, Math.max(0, 13.2 - t) / .6), vis = Math.min(fadeIn, fadeOut);
         const sepEnd = mut ? 255 : 375, sepMeta = 255;   // variant: anaphase B (spindle elongation) fails
-        const REC = 7.4, recong = mut ? ease((t - REC) / 3.6) : 0;
+        const REC = ANA + 1.2, recong = mut ? ease((t - REC) / 5.4) : 0;   // overlaps chromosome-to-pole movement
         const half = lerp(sepMeta, sepEnd, a) - 95 * recong;   // variant: poles then move back toward each other
         const xL = cx - half, xR = cx + half;
         // chromatid travel: fraction of the way from the plate to a spot near the pole
         // anaphase A proceeds in both; with the variant, chromosomes are then pushed back to the middle (recongression)
-        const travel = (mut ? ease((t - ANA) / 3.2) : a) * (1 - .35 * recong);
+        const travel = a * (1 - .35 * recong);   // anaphase A runs on the same clock as anaphase B
         const k22on = mut ? 1 : 1 - ease((t - ANA) / .8);  // KIF22 switches off in anaphase (unless mutant)
         const osc = t < ANA ? Math.sin(t * 2.2) * 6 : 0;
         const rows = [-70, 0, 70];
@@ -1267,7 +1267,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
         legend([[C.k22, mut ? 'KIF22 disease variant' : 'KIF22 (chromokinesin)'], [C.chr, 'chromosomes'], [C.a, 'microtubules']]);
         if (t < ANA) status('Metaphase: KIF22 pushes chromosome arms away from the poles');
         else if (!mut) status('Anaphase: KIF22 switches off, and chromosomes and poles separate');
-        else if (t < REC) status('Variant stays on: chromosomes reach the poles, but the poles don\u2019t separate', C.k22);
+        else if (t < ANA + 3) status('Variant stays on: chromosomes move poleward, but the poles don\u2019t separate', C.k22);
         else status('Poles move back together and chromosomes recongress', C.k22);
       }
     };
