@@ -177,6 +177,12 @@ img, video { max-width: 100%; height: auto; display: block; }
 .btn.primary { background: var(--accent); color: var(--bg); }
 .btn.ghost { color: var(--accent); }
 .hero figure { margin: 0; min-width: 0; }
+.hero-media { display: grid; gap: 22px; min-width: 0; }
+.motor-frame { position: relative; border-radius: 14px; overflow: hidden; background: #071012; }
+.motor-frame canvas { display: block; width: 100%; height: auto; aspect-ratio: 900 / 340; }
+.motor-toggle { position: absolute; right: 10px; top: 10px; font-family: var(--display); font-weight: 600; font-size: 12.5px; color: #e8eeea; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.25); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+.motor-toggle:hover { background: rgba(255,255,255,.16); }
+
 .hero figure img { width: 100%; height: auto; border-radius: 14px; background: var(--field); }
 .hero figcaption { font-size: 14px; color: var(--muted); margin-top: 10px; }
 
@@ -409,7 +415,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
   <div class="wrap">
     <div>
       <p class="eyebrow"><a class="eyebrow-link" href="https://www.uvm.edu/larnermed/mpb">Molecular Physiology &amp; Biophysics</a> · UVM<br><a class="eyebrow-link" href="https://www.uvm.edu/larnermed/uvmcancercenter">UVM Cancer Center</a></p>
-      <h1>How cells tune their molecular motors and the <em>consequences of motor dysfunction</em></h1>
+      <h1>Molecular motors in <em>health and disease</em></h1>
       <p class="lede">Molecular motors are tiny protein machines that turn chemical energy into movement, walking along tracks inside the cell to carry cargo and to push and pull on chromosomes. We study the biology of kinesin motors: how cells switch them on and off and tune their activities for specific jobs, and how defects in that control contribute to cancer, bone disease, neurodevelopmental disorders, and infertility.</p>
       <div class="areas" aria-label="Research areas">
         <a href="#p-cancer">Cancer</a><a href="#p-bone">Bone dysplasia</a><a href="#p-neuro">Neurodevelopment</a><a href="#p-fertility">Infertility</a>
@@ -419,10 +425,19 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
         <a class="btn ghost" href="#research">Our research</a>
       </div>
     </div>
+    <div class="hero-media">
+    <figure class="motor-fig">
+      <div class="motor-frame">
+        <canvas id="motor-anim" width="900" height="340" role="img" aria-label="Animation of kinesin motor proteins walking hand-over-hand along a microtubule toward its plus end. Some carry cargo; kinesin-8 motors gather at the growing end and pause its growth, after which the microtubule shrinks and then regrows."></canvas>
+        <button type="button" class="motor-toggle" id="motor-toggle" aria-pressed="false">Pause</button>
+      </div>
+      <figcaption>Kinesins are motor proteins that walk along microtubules, one 8-nanometer step at a time, powered by ATP. Some carry cargo through the cell. Others, like KIF18A, gather at microtubule ends and control their growth. (Animation; not to scale.)</figcaption>
+    </figure>
     <figure>
       <img src="media/hero-spindle.jpg" alt="Fluorescence image of a human mitotic spindle: green microtubules fan out from two poles around blue chromosomes aligned at the center" width="1400" height="1400">
       <figcaption>A human cell in metaphase. Microtubules (green) align the chromosomes (blue) at the spindle equator before they are pulled apart.</figcaption>
     </figure>
+    </div>
   </div>
 </header>
 
@@ -903,6 +918,185 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
   lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
 
+
+
+  // ---- kinesin animation (drawn from scratch) ----
+  (() => {
+    const cv = document.getElementById('motor-anim');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = 900, H = 340;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // geometry: one tubulin dimer = 8 nm = D px
+    const D = 26, X0 = 40, YC = 222, ROWH = 15, NROW = 3;
+    const rowY = r => YC + (r - 1) * (ROWH + 1);           // row centers
+    const TOP = rowY(0) - ROWH / 2;                           // lattice top surface
+    const STAG = [0, 0.34, 0.67];                             // helical stagger (dimers)
+    const MAXL = 30, MINL = 15;
+    const len = [21, 21, 20];                                 // dimers per protofilament row
+    const C = { a: '#7fe0a3', b: '#3fae74', edge: 'rgba(0,0,0,.35)', gold: '#f1c75b', pink: '#ff7ab6',
+                ves: 'rgba(181,140,255,.28)', vesE: '#b58cff', ink: '#e8eeea', mut: '#93a39b', bg: '#071012' };
+
+    let phase = 'grow', phaseT = 0, growT = 0, shrinkT = 0, spawnT = 1.2, spawnN = 0, t = 0;
+    const motors = [], flakes = [], free = [];
+    for (let i = 0; i < 14; i++) free.push({ x: Math.random() * W, y: 40 + Math.random() * (H - 90), vx: (Math.random() - .5) * 10, vy: (Math.random() - .5) * 6, a: Math.random() * 6.28 });
+
+    const rowEndX = r => X0 + (STAG[r] + len[r]) * D;
+    const tipIdx = () => len[0] - 1;                          // last dimer motors can stand on (top row)
+    const headX = i => X0 + (STAG[0] + i + 0.5) * D;
+
+    function spawn() {
+      const kind = spawnN++ % 3 === 1 ? 'cargo' : 'k8';
+      motors.push({ kind, rear: 0, front: 1, stepping: 0, dwell: .2 + Math.random() * .3, state: 'walk', y: 0, alpha: 0, vy: 0 });
+    }
+
+    function update(dt) {
+      t += dt; phaseT += dt;
+      // free tubulin drifting in solution
+      for (const f of free) { f.x += f.vx * dt; f.y += f.vy * dt; f.a += dt * .4; if (f.x < -20) f.x = W + 20; if (f.x > W + 20) f.x = -20; if (f.y < 30 || f.y > H - 50) f.vy *= -1; }
+      // spawn motors at the minus end
+      spawnT -= dt; if (spawnT <= 0) { spawn(); spawnT = 2.1 + Math.random() * 1.2; }
+
+      const k8AtTip = motors.filter(m => m.kind === 'k8' && m.state === 'tip').length;
+      if (phase === 'grow') {
+        growT -= dt;
+        if (growT <= 0) { let r = 0; for (let i = 1; i < NROW; i++) if (len[i] + STAG[i] < len[r] + STAG[r]) r = i; if (len[r] < MAXL) len[r]++; growT = .32; }
+        if (k8AtTip >= 2) { phase = 'paused'; phaseT = 0; }
+        else if (Math.min(...len) >= MAXL) { phase = 'shrink'; phaseT = 0; }
+      } else if (phase === 'paused') {
+        if (phaseT > 3.2) { phase = 'shrink'; phaseT = 0; }
+      } else if (phase === 'shrink') {
+        shrinkT -= dt;
+        if (shrinkT <= 0) {
+          let r = 0; for (let i = 1; i < NROW; i++) if (len[i] + STAG[i] > len[r] + STAG[r]) r = i;
+          if (len[r] > MINL) {
+            const x = X0 + (STAG[r] + len[r] - 1) * D, y = rowY(r);
+            flakes.push({ x, y, vx: 30 + Math.random() * 30, vy: (r - 1) * 45 + (r === 1 ? -20 : 0) + (Math.random() - .5) * 20, rot: 0, vr: (r === 2 ? 1 : -1) * (2 + Math.random() * 2), life: 1.4 });
+            len[r]--;
+          }
+          shrinkT = .085;
+        }
+        if (Math.max(...len) <= MINL + 1) { phase = 'grow'; phaseT = 0; }
+      }
+
+      // motors: hand-over-hand, 8 nm per step, plus-end directed
+      motors.sort((a, b) => b.front - a.front);
+      for (let k = 0; k < motors.length; k++) {
+        const m = motors[k];
+        if (m.state === 'walk') {
+          m.alpha = Math.min(1, m.alpha + dt * 3);
+          const ahead = motors.slice(0, k).find(o => o.state !== 'gone' && o.state !== 'free');
+          const limit = ahead ? ahead.rear - 1 : tipIdx();
+          if (m.stepping > 0) {
+            m.stepping += dt / .2;
+            if (m.stepping >= 1) { m.stepping = 0; const r = m.rear; m.rear = m.front; m.front = r + 2; m.dwell = .12 + Math.random() * .22; }
+          } else {
+            m.dwell -= dt;
+            if (m.dwell <= 0) { if (m.front + 1 <= limit) m.stepping = .001; else if (m.front >= tipIdx()) m.state = m.kind === 'k8' ? 'tip' : 'free'; }
+          }
+          if (m.front > tipIdx() || m.rear > tipIdx()) m.state = 'free';
+        } else if (m.state === 'tip') {
+          if (phase === 'shrink' || m.front > tipIdx()) m.state = 'free';
+        } else if (m.state === 'free') {
+          m.vy -= dt * 30; m.y += m.vy * dt; m.alpha -= dt * .8; if (m.alpha <= 0) m.state = 'gone';
+        }
+      }
+      for (let i = motors.length - 1; i >= 0; i--) if (motors[i].state === 'gone') motors.splice(i, 1);
+      for (let i = flakes.length - 1; i >= 0; i--) { const f = flakes[i]; f.x += f.vx * dt; f.y += f.vy * dt; f.rot += f.vr * dt; f.life -= dt; if (f.life <= 0) flakes.splice(i, 1); }
+    }
+
+    function dimer(x, y, rot, alpha) {
+      ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.globalAlpha = alpha;
+      ctx.fillStyle = C.a; ctx.beginPath(); ctx.roundRect(1, -ROWH / 2, D / 2 - 1.5, ROWH, 4); ctx.fill();
+      ctx.fillStyle = C.b; ctx.beginPath(); ctx.roundRect(D / 2 + .5, -ROWH / 2, D / 2 - 1.5, ROWH, 4); ctx.fill();
+      ctx.restore();
+    }
+
+    function drawMotor(m) {
+      const s = Math.min(m.stepping, 1);
+      const rx = headX(m.rear), fx = headX(m.front);
+      const hy = TOP - 9;
+      let ax = rx, ay = hy;                                    // moving (rear) head
+      if (s > 0) { const tx = headX(m.rear + 2); ax = rx + (tx - rx) * s; ay = hy - Math.sin(s * Math.PI) * 18; }
+      const jx = (ax + fx) / 2, jy = hy - 20 + m.y;
+      const col = m.kind === 'cargo' ? C.gold : C.pink;
+      ctx.globalAlpha = Math.max(0, m.alpha);
+      ctx.strokeStyle = col; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(ax, ay + m.y - 3); ctx.lineTo(jx, jy); ctx.lineTo(fx, hy + m.y - 3); ctx.stroke();  // neck linkers
+      const stalk = m.kind === 'cargo' ? 50 : 30;
+      ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(jx, jy);
+      for (let i = 1; i <= 6; i++) ctx.lineTo(jx + (i % 2 ? 2.2 : -2.2), jy - stalk * i / 6); ctx.stroke();            // coiled-coil stalk
+      if (m.kind === 'cargo') {
+        ctx.fillStyle = C.ves; ctx.strokeStyle = C.vesE; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(jx, jy - stalk - 19, 20, 0, 6.283); ctx.fill(); ctx.stroke();
+      } else { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(jx, jy - stalk - 3, 3.5, 0, 6.283); ctx.fill(); }
+      ctx.fillStyle = col;
+      for (const [x, y] of [[ax, ay + m.y], [fx, hy + m.y]]) { ctx.beginPath(); ctx.ellipse(x, y, 10, 8, 0, 0, 6.283); ctx.fill(); }
+      ctx.globalAlpha = 1;
+    }
+
+    function label(txt, x, y, color, align) { ctx.fillStyle = color; ctx.textAlign = align || 'left'; ctx.fillText(txt, x, y); }
+
+    function draw() {
+      ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+      // free tubulin in solution
+      for (const f of free) { ctx.save(); ctx.translate(f.x, f.y); ctx.rotate(f.a); ctx.globalAlpha = .28; ctx.fillStyle = C.a; ctx.beginPath(); ctx.roundRect(-9, -4, 8, 8, 3); ctx.fill(); ctx.fillStyle = C.b; ctx.beginPath(); ctx.roundRect(1, -4, 8, 8, 3); ctx.fill(); ctx.restore(); }
+      // microtubule lattice
+      for (let r = NROW - 1; r >= 0; r--) {
+        const shade = r === 1 ? 1 : .82;
+        for (let i = 0; i < len[r]; i++) {
+          const fresh = phase === 'grow' && i === len[r] - 1 ? Math.min(1, (0.32 - growT) / 0.2 + .3) : 1;
+          dimer(X0 + (STAG[r] + i) * D, rowY(r), 0, shade * fresh);
+        }
+      }
+      // curling protofilament ends while shrinking
+      if (phase === 'shrink') for (const r of [0, 2]) { const x = X0 + (STAG[r] + len[r]) * D; dimer(x, rowY(r), (r === 0 ? -1 : 1) * .45, .85); dimer(x + D * .86, rowY(r) + (r === 0 ? -1 : 1) * 10, (r === 0 ? -1 : 1) * .95, .7); }
+      for (const f of flakes) dimer(f.x, f.y, f.rot, Math.max(0, f.life / 1.4) * .8);
+      for (const m of motors) drawMotor(m);
+
+      // labels
+      ctx.font = '600 19px "IBM Plex Mono", ui-monospace, monospace';
+      label('− end', X0 - 4, YC + 50, C.mut);
+      const tipX = Math.max(...[0, 1, 2].map(rowEndX));
+      label('+ end', tipX - 4, YC + 50, C.mut, 'right');
+      // 8 nm scale under one dimer
+      const sx = X0 + 2 * D;
+      ctx.strokeStyle = C.mut; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(sx, YC + 69); ctx.lineTo(sx + D, YC + 69); ctx.moveTo(sx, YC + 64); ctx.lineTo(sx, YC + 74); ctx.moveTo(sx + D, YC + 64); ctx.lineTo(sx + D, YC + 74); ctx.stroke();
+      ctx.font = '500 16px "IBM Plex Mono", ui-monospace, monospace';
+      label('8 nm = one step', sx + D + 10, YC + 74, C.mut);
+      // status
+      ctx.font = '600 19px "Schibsted Grotesk", system-ui, sans-serif';
+      const st = phase === 'grow' ? 'microtubule growing' : phase === 'paused' ? 'growth paused by kinesin-8' : 'microtubule shrinking';
+      const stc = phase === 'paused' ? C.pink : C.ink;
+      ctx.textAlign = 'right'; ctx.fillStyle = stc; ctx.fillText(st, W - 24, H - 22);
+      // legend
+      ctx.textAlign = 'left'; ctx.font = '500 19px "Schibsted Grotesk", system-ui, sans-serif';
+      const lg = [[C.gold, 'kinesin carrying cargo'], [C.pink, 'kinesin-8 (KIF18A)'], [C.a, 'tubulin']];
+      lg.forEach(([c, s], i) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(30, 32 + i * 28, 8, 0, 6.283); ctx.fill(); ctx.fillStyle = C.ink; ctx.fillText(s, 48, 39 + i * 28); });
+    }
+
+    if (!CanvasRenderingContext2D.prototype.roundRect) CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h) { this.rect(x, y, w, h); };
+
+    let running = !reduceMotion, visible = true, last = 0, raf = 0;
+    const btn = document.getElementById('motor-toggle');
+    function loop(ts) {
+      const dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts;
+      update(dt); draw();
+      if (running && visible) raf = requestAnimationFrame(loop);
+    }
+    function start() { cancelAnimationFrame(raf); last = performance.now(); raf = requestAnimationFrame(loop); }
+    function setRunning(v) { running = v; btn.textContent = v ? 'Pause' : 'Play'; btn.setAttribute('aria-pressed', String(!v)); if (v && visible) start(); }
+    btn.addEventListener('click', () => setRunning(!running));
+    if ('IntersectionObserver' in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && running) start(); }).observe(cv);
+    // warm up so the first frame already shows motors on the lattice
+    for (let i = 0; i < 360; i++) update(1 / 60);
+    draw();
+    setRunning(running);
+    window.__motorAnim = { setRunning };
+  })();
 
   // ---- pause / play all movies ----
   const mt = document.getElementById('motion-toggle');
