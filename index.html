@@ -513,7 +513,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
           <div class="kin-ctrls"><button type="button" class="kin-btn" id="kin-variant">Show disease variant</button><button type="button" class="kin-btn" id="kin-pause" aria-pressed="false">Pause</button></div>
         </div>
         <figcaption>
-          <p class="kin-cap" data-scene="kif22"><b>KIF22</b> is a chromokinesin. It binds chromosome arms and walks toward microtubule plus ends, pushing the arms away from the spindle poles. It normally switches off at anaphase. Variants that cause the skeletal disorder SEMDJL2 keep it switched on. Chromosomes still move to the poles (anaphase A), but the spindle poles fail to separate (anaphase B) and instead move back toward each other, bringing the chromosomes back together in the middle (recongression). This can lead to cytokinesis failure. <a href="https://doi.org/10.7554/elife.78653">Thompson et al., <i>eLife</i> 2022</a>; <a href="https://doi.org/10.1091/mbc.e26-03-0126">Šemić et al., <i>MBoC</i> 2026</a>.</p>
+          <p class="kin-cap" data-scene="kif22"><b>KIF22</b> is a chromokinesin. It binds chromosome arms and walks toward microtubule plus ends, pushing the arms away from the spindle poles. It normally switches off at anaphase. Variants that cause the skeletal disorder SEMDJL2 keep it switched on. Chromosomes still move to the poles (anaphase A), but the spindle poles, after starting to separate (anaphase B), move back to where they started, and the chromosomes come back together in the middle (recongression). This can lead to cytokinesis failure. <a href="https://doi.org/10.7554/elife.78653">Thompson et al., <i>eLife</i> 2022</a>; <a href="https://doi.org/10.1091/mbc.e26-03-0126">Šemić et al., <i>MBoC</i> 2026</a>.</p>
           <p class="kin-cap kin-see" data-scene="kif22"><b>See this in actual cells:</b> <a href="#mov-kif22-anaphase">anaphase movements</a> · <a href="#mov-kif22-recongression">chromosome recongression</a> · <a href="#mov-kif22-cytokinesis">cytokinesis failure</a> · <a href="#mov-kif22-chondrocytes">chondrocyte division</a></p>
           <p class="kin-cap" data-scene="kif11" hidden><b>KIF11</b> (kinesin-5, also called Eg5) is a four-headed motor that links two microtubules pointing in opposite directions and walks toward the plus end of each, sliding them apart to push the spindle poles away from each other. Blocking KIF11 leaves cells with a monopolar spindle. We study how modifications in its motor domain tune its force output. <a href="https://doi.org/10.1073/pnas.1718290115">Muretta et al., <i>PNAS</i> 2018</a>; <a href="https://doi.org/10.1073/pnas.2602415123">Šemić et al., <i>PNAS</i> 2026</a>.</p>
           <p class="kin-cap kin-see" data-scene="kif11" hidden><b>See this in actual cells:</b> <a href="#mov-kif11-assembly">spindle assembly after a KIF11 inhibitor is washed out</a></p>
@@ -1210,12 +1210,13 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
         const a = ease((t - ANA) / 4.2);                  // anaphase progress
         const fadeIn = Math.min(1, t / .6), fadeOut = Math.min(1, Math.max(0, 13.2 - t) / .6), vis = Math.min(fadeIn, fadeOut);
         const sepEnd = mut ? 255 : 375, sepMeta = 255;   // variant: anaphase B (spindle elongation) fails
-        const REC = ANA + 1.2, recong = mut ? ease((t - REC) / 5.4) : 0;   // overlaps chromosome-to-pole movement
-        const half = lerp(sepMeta, sepEnd, a) - 95 * recong;   // variant: poles then move back toward each other
+        const REC = ANA + 1.8, recong = mut ? ease((t - REC) / 4.6) : 0;   // overlaps chromosome-to-pole movement
+        const half = mut ? sepMeta + 50 * ease((t - ANA) / 2.4) * (1 - recong)   // variant: anaphase B starts, then poles return to metaphase spacing
+                         : lerp(sepMeta, sepEnd, a);
         const xL = cx - half, xR = cx + half;
         // chromatid travel: fraction of the way from the plate to a spot near the pole
         // anaphase A proceeds in both; with the variant, chromosomes are then pushed back to the middle (recongression)
-        const travel = a * (1 - .35 * recong);   // anaphase A runs on the same clock as anaphase B
+        const travel = a * (1 - .45 * recong);   // anaphase A runs on the same clock as anaphase B
         const k22on = mut ? 1 : 1 - ease((t - ANA) / .8);  // KIF22 switches off in anaphase (unless mutant)
         const osc = t < ANA ? Math.sin(t * 2.2) * 6 : 0;
         const rows = [-70, 0, 70];
@@ -1267,8 +1268,8 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
         legend([[C.k22, mut ? 'KIF22 disease variant' : 'KIF22 (chromokinesin)'], [C.chr, 'chromosomes'], [C.a, 'microtubules']]);
         if (t < ANA) status('Metaphase: KIF22 pushes chromosome arms away from the poles');
         else if (!mut) status('Anaphase: KIF22 switches off, and chromosomes and poles separate');
-        else if (t < ANA + 3) status('Variant stays on: chromosomes move poleward, but the poles don\u2019t separate', C.k22);
-        else status('Poles move back together and chromosomes recongress', C.k22);
+        else if (t < ANA + 3) status('Variant stays on: the poles start to separate\u2026', C.k22);
+        else status('\u2026then return to where they started, and chromosomes recongress', C.k22);
       }
     };
 
