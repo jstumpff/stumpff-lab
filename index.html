@@ -393,11 +393,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
 .site-foot { background: var(--band); color: var(--band-ink); padding: 0 0 26px; border-top: 0; font-size: 15px; }
 .mt-strip { position: relative; height: 46px; overflow: hidden; background: linear-gradient(var(--band), var(--band)) ; }
 .mt-strip::after { content: ""; position: absolute; left: 0; right: 0; bottom: 4px; height: 7px; background: repeating-linear-gradient(90deg, #7fe0a3 0 7px, #3fae74 7px 13px, transparent 13px 14px); opacity: .8; }
-.mini-motor { position: absolute; bottom: 9px; left: -40px; width: 40px; height: 40px; animation: footwalk 40s linear infinite; }
-.mini-motor .head-a, .mini-motor .leg-a { animation: stepA .8s ease-in-out infinite; }
-.mini-motor .head-b, .mini-motor .leg-b { animation: stepA .8s ease-in-out infinite .4s; }
-@keyframes stepA { 0%, 100% { transform: translateY(0); } 25% { transform: translateY(-4px); } 50% { transform: translateY(0); } }
-@keyframes footwalk { from { left: -40px; } to { left: 100%; } }
+.foot-walker { position: absolute; left: 0; top: 0; overflow: visible; }
 .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 32px; padding-top: 34px; }
 .foot-grid h3 { font-size: 13px; font-family: var(--mono); font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--band-gold); margin-bottom: 10px; }
 .foot-grid nav { display: grid; gap: 7px; align-content: start; }
@@ -409,7 +405,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
 .foot-base { margin-top: 30px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.14); color: var(--band-muted); font-size: 13.5px; }
 @media (max-width: 900px) { .ways { grid-template-columns: 1fr 1fr; } .foot-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .foot-grid { grid-template-columns: 1fr 1fr; gap: 26px 20px; } .foot-brand, .foot-grid nav[aria-label="University of Vermont"] { grid-column: 1 / -1; } }
-@media (prefers-reduced-motion: reduce) { .mini-motor, .mini-walk, .mini-motor * { animation: none !important; } .mini-motor { left: 46%; } }
+@media (prefers-reduced-motion: reduce) { .mini-walk { animation: none !important; } }
 
 
 @media (max-width: 960px) {
@@ -990,7 +986,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
 </div>
 
 <footer class="site-foot">
-  <div class="mt-strip" aria-hidden="true"><span class="mini-motor"><svg viewBox="0 0 40 40" width="40" height="40"><path class="leg-a" d="M12 33l8-13" stroke="#ff7ab6" stroke-width="2.2" fill="none" stroke-linecap="round"/><path class="leg-b" d="M28 33l-8-13" stroke="#ff7ab6" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M20 20l2-4-4-4 4-4-2-4" stroke="#ff7ab6" stroke-width="2.4" fill="none" stroke-linecap="round"/><ellipse class="head-a" cx="12" cy="34" rx="6.5" ry="5" fill="#ff7ab6"/><ellipse class="head-b" cx="28" cy="34" rx="6.5" ry="5" fill="#ff7ab6"/></svg></span></div>
+  <div class="mt-strip" aria-hidden="true"><svg id="foot-walker" class="foot-walker" width="100%" height="46"><path class="fw-neck" d="" stroke="#ff7ab6" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path class="fw-stalk" d="M0 0l2-3.5-4-3.5 4-3.5-4-3.5 2-3" stroke="#ff7ab6" stroke-width="2.4" fill="none" stroke-linecap="round"/><ellipse class="fw-a" cx="-20" cy="30" rx="6.5" ry="5" fill="#ff7ab6"/><ellipse class="fw-b" cx="-6" cy="30" rx="6.5" ry="5" fill="#ff7ab6"/></svg></div>
   <div class="wrap foot-grid">
     <div class="foot-brand">
       <p class="foot-name">Stumpff Lab</p>
@@ -1638,6 +1634,41 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
     window.__kinAnim = { setRunning, select, scenes };
   })();
 
+
+  // ---- footer kinesin: walks hand-over-hand along the microtubule strip ----
+  (function () {
+    const svg = document.getElementById('foot-walker');
+    if (!svg) return;
+    const D = 14, HY = 30, JY = 18;                          // one tubulin dimer = D px
+    const neck = svg.querySelector('.fw-neck'), stalk = svg.querySelector('.fw-stalk');
+    const hA = svg.querySelector('.fw-a'), hB = svg.querySelector('.fw-b');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let n = -3, s = 0, dwell = 0, last = 0, raf = 0, visible = false;
+    let back = hA, frontH = hB;                               // which head is currently behind
+    const cx = i => i * D + D / 2;
+    function draw() {
+      const w = svg.clientWidth || 1200;
+      if (cx(n) > w + 40) n = -3;
+      // rear head at n, front head at n+1; during a step the rear head swings over to n+2
+      const rx0 = cx(n), fx = cx(n + 1);
+      const rx = rx0 + (cx(n + 2) - rx0) * s, ry = HY - Math.sin(s * Math.PI) * 11;
+      const jx = (rx + fx) / 2;
+      back.setAttribute('cx', rx.toFixed(1)); back.setAttribute('cy', ry.toFixed(1));
+      frontH.setAttribute('cx', fx.toFixed(1)); frontH.setAttribute('cy', HY);
+      neck.setAttribute('d', `M${rx.toFixed(1)} ${(ry - 3).toFixed(1)}L${jx.toFixed(1)} ${JY}L${fx.toFixed(1)} ${HY - 3}`);
+      stalk.setAttribute('transform', `translate(${jx.toFixed(1)} ${JY})`);
+    }
+    function tick(ts) {
+      const dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts;
+      if (s > 0) { s += dt / .22; if (s >= 1) { s = 0; n += 1; const t = back; back = frontH; frontH = t; dwell = .18 + Math.random() * .2; } }
+      else { dwell -= dt; if (dwell <= 0) s = .001; }
+      draw();
+      if (visible) raf = requestAnimationFrame(tick);
+    }
+    if (reduce) { n = Math.round((svg.clientWidth || 1200) / 2 / D); draw(); return; }
+    draw();
+    if ('IntersectionObserver' in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) { cancelAnimationFrame(raf); last = performance.now(); raf = requestAnimationFrame(tick); } }).observe(svg);
+  })();
   // ---- pause / play all movies ----
   const mt = document.getElementById('motion-toggle');
   const vids = () => [...document.querySelectorAll('video')];
