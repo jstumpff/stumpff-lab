@@ -182,6 +182,20 @@ img, video { max-width: 100%; height: auto; display: block; }
 .motor-frame canvas { display: block; width: 100%; height: auto; aspect-ratio: 900 / 340; }
 .motor-toggle { position: absolute; right: 10px; top: 10px; font-family: var(--display); font-weight: 600; font-size: 12.5px; color: #e8eeea; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.25); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
 .motor-toggle:hover { background: rgba(255,255,255,.16); }
+.kin-fig { margin: 0; max-width: 980px; }
+.kin-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.kin-tabs button { font-family: var(--display); font-weight: 600; font-size: 15px; padding: 7px 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.kin-tabs button:hover { border-color: var(--accent); }
+.kin-tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.kin-frame canvas { aspect-ratio: 900 / 380; }
+.kin-ctrls { position: absolute; right: 10px; top: 10px; display: flex; gap: 8px; }
+.kin-btn { font-family: var(--display); font-weight: 600; font-size: 13px; color: #e8eeea; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.25); border-radius: 999px; padding: 5px 13px; cursor: pointer; }
+.kin-btn:hover { background: rgba(255,255,255,.16); }
+.kin-fig figcaption { font-size: 15px; color: var(--muted); margin-top: 12px; max-width: 60em; }
+.kin-fig figcaption p { margin: 0; }
+.kin-fig .kin-note { font-size: 13px; margin-top: 6px; }
+.hero-spindle { display: grid; grid-template-columns: minmax(0, 52%) 1fr; gap: 18px; align-items: end; }
+.hero-spindle figcaption { margin-top: 0; }
 
 .hero figure img { width: 100%; height: auto; border-radius: 14px; background: var(--field); }
 .hero figcaption { font-size: 14px; color: var(--muted); margin-top: 10px; }
@@ -373,6 +387,8 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
 
 /* phones: compact nav, two-up people and art */
 @media (max-width: 640px) {
+  .kin-ctrls { position: static; justify-content: flex-end; padding: 0 8px 8px; }
+  .hero-spindle { grid-template-columns: minmax(0, 46%) 1fr; }
   .nav .wrap { flex-wrap: nowrap; flex-direction: column; align-items: stretch; gap: 6px; padding-block: 10px 8px; }
   .brand small { display: none; }
   .nav ul { flex-wrap: nowrap; overflow-x: auto; gap: 18px; padding-bottom: 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
@@ -433,7 +449,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
       </div>
       <figcaption>Kinesins are motor proteins that walk along microtubules, one 8-nanometer step at a time, powered by ATP. Some carry cargo through the cell. Others, like KIF18A, collect at microtubule ends and stop them from growing or shrinking. (Animation; not to scale.)</figcaption>
     </figure>
-    <figure>
+    <figure class="hero-spindle">
       <img src="media/hero-spindle.jpg" alt="Fluorescence image of a human mitotic spindle: green microtubules fan out from two poles around blue chromosomes aligned at the center" width="1400" height="1400">
       <figcaption>A human cell in metaphase. Microtubules (green) align the chromosomes (blue) at the spindle equator before they are pulled apart.</figcaption>
     </figure>
@@ -473,6 +489,29 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
           <div class="tags"><span class="tag">CRISPRi/a screens</span><span class="tag">reconstitution assays</span><span class="tag">high-temporal resolution imaging</span></div>
         </article>
       </div>
+    </div>
+
+    <div class="subsection" id="motors">
+      <div class="subhead">
+        <h3>Examples of kinesins and their regulators we study</h3>
+      </div>
+      <figure class="kin-fig">
+        <div class="kin-tabs" role="tablist" aria-label="Choose a protein">
+          <button type="button" role="tab" id="tab-kif22" data-scene="kif22" aria-selected="true" aria-controls="kin-panel">KIF22</button>
+          <button type="button" role="tab" id="tab-kif11" data-scene="kif11" aria-selected="false" aria-controls="kin-panel" tabindex="-1">KIF11</button>
+          <button type="button" role="tab" id="tab-kifbp" data-scene="kifbp" aria-selected="false" aria-controls="kin-panel" tabindex="-1">KIFBP</button>
+        </div>
+        <div class="motor-frame kin-frame" id="kin-panel" role="tabpanel">
+          <canvas id="kin-anim" width="900" height="380" role="img" aria-label="Animations of three proteins the lab studies. KIF22 pushes chromosome arms away from spindle poles and normally switches off in anaphase; a disease variant stays on. KIF11 slides antiparallel microtubules apart to separate spindle poles; with an inhibitor the spindle stays monopolar. KIFBP binds kinesin motor heads and keeps them off microtubules."></canvas>
+          <div class="kin-ctrls"><button type="button" class="kin-btn" id="kin-variant">Show disease variant</button><button type="button" class="kin-btn" id="kin-pause" aria-pressed="false">Pause</button></div>
+        </div>
+        <figcaption>
+          <p class="kin-cap" data-scene="kif22"><b>KIF22</b> is a chromokinesin. It binds chromosome arms and walks toward microtubule plus ends, pushing the arms away from the spindle poles. It normally switches off at anaphase. Variants that cause the skeletal disorder SEMDJL2 keep it switched on, so chromosomes and spindle poles fail to separate fully. <a href="https://doi.org/10.7554/elife.78653">Thompson et al., <i>eLife</i> 2022</a>; <a href="https://doi.org/10.1091/mbc.e26-03-0126">Šemić et al., <i>MBoC</i> 2026</a>.</p>
+          <p class="kin-cap" data-scene="kif11" hidden><b>KIF11</b> (kinesin-5, also called Eg5) is a four-headed motor that links two microtubules pointing in opposite directions and walks toward the plus end of each, sliding them apart to push the spindle poles away from each other. Blocking KIF11 leaves cells with a monopolar spindle. We study how modifications in its motor domain tune its force output. <a href="https://doi.org/10.1073/pnas.1718290115">Muretta et al., <i>PNAS</i> 2018</a>; <a href="https://doi.org/10.1073/pnas.2602415123">Šemić et al., <i>PNAS</i> 2026</a>.</p>
+          <p class="kin-cap" data-scene="kifbp" hidden><b>Kinesin-binding protein (KIFBP)</b> grabs the motor domains of a subset of kinesins, including KIF18A and KIF15, and remodels them so they can't bind microtubules. In dividing cells it acts as a buffer that protects against too much motor activity. <a href="https://doi.org/10.1083/jcb.201806195">Malaby et al., <i>JCB</i> 2019</a>; <a href="https://doi.org/10.1126/sciadv.abj9812">Solon et al., <i>Sci Adv</i> 2021</a>.</p>
+          <p class="kin-note">Animations; not to scale.</p>
+        </figcaption>
+      </figure>
     </div>
 
     <div class="subsection">
@@ -1096,6 +1135,336 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
     draw();
     setRunning(running);
     window.__motorAnim = { setRunning };
+  })();
+
+  // ---- "Examples of kinesins and their regulators" animations (drawn from scratch) ----
+  (function () {
+    const cv = document.getElementById('kin-anim');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = 900, H = 380;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = W * dpr; cv.height = H * dpr; ctx.scale(dpr, dpr);
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!CanvasRenderingContext2D.prototype.roundRect) CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h) { this.rect(x, y, w, h); };
+
+    const C = { a: '#7fe0a3', b: '#3fae74', ink: '#e8eeea', mut: '#93a39b', bg: '#071012', pole: '#e8eeea',
+                chr: '#6aa9ff', chrE: '#3d7fe0', k22: '#ffa04d', k11: '#5ad1e6', pink: '#ff7ab6', k15: '#f1c75b',
+                bp: '#b9a6ff', drug: '#ff5d5d', off: '#5b6b64' };
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
+    const lerp = (a, b, f) => a + (b - a) * f;
+
+    // a microtubule drawn as a row of tubulin dimers from (x0,y0) toward (x1,y1); phase slides the lattice (flux)
+    function mt(x0, y0, x1, y1, phase, alpha, d) {
+      d = d || 14;
+      const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy);
+      if (L < 2) return;
+      ctx.save(); ctx.translate(x0, y0); ctx.rotate(Math.atan2(dy, dx)); ctx.globalAlpha = alpha;
+      const off = ((phase % d) + d) % d;
+      for (let s = off - d; s < L; s += d) {
+        const s0 = Math.max(0, s), s1 = Math.min(L, s + d / 2 - 1), s2 = Math.max(0, s + d / 2), s3 = Math.min(L, s + d - 1);
+        ctx.fillStyle = C.a; if (s1 > s0) ctx.fillRect(s0, -3.5, s1 - s0, 7);
+        ctx.fillStyle = C.b; if (s3 > s2) ctx.fillRect(s2, -3.5, s3 - s2, 7);
+      }
+      ctx.restore();
+    }
+    function pole(x, y, a) {
+      ctx.globalAlpha = a == null ? 1 : a;
+      const g = ctx.createRadialGradient(x, y, 2, x, y, 26);
+      g.addColorStop(0, 'rgba(232,238,234,.95)'); g.addColorStop(.45, 'rgba(232,238,234,.35)'); g.addColorStop(1, 'rgba(232,238,234,0)');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, 26, 0, 6.283); ctx.fill();
+      ctx.fillStyle = C.pole; ctx.beginPath(); ctx.arc(x, y, 7, 0, 6.283); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    function legend(items) {
+      ctx.textAlign = 'left'; ctx.font = '500 18px "Schibsted Grotesk", system-ui, sans-serif';
+      items.forEach(([c, s], i) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(28, 30 + i * 26, 7.5, 0, 6.283); ctx.fill(); ctx.fillStyle = C.ink; ctx.fillText(s, 44, 36 + i * 26); });
+    }
+    function status(txt, col) {
+      ctx.font = '600 18px "Schibsted Grotesk", system-ui, sans-serif';
+      ctx.textAlign = 'right'; ctx.fillStyle = col || C.ink; ctx.fillText(txt, W - 22, H - 18);
+    }
+    // two-headed motor glyph (heads at a, b), optional stalk to (sx, sy)
+    function heads(x, y, col, r) { ctx.fillStyle = col; ctx.beginPath(); ctx.ellipse(x, y, r || 7, (r || 7) * .8, 0, 0, 6.283); ctx.fill(); }
+
+    // ================= KIF22 =================
+    const k22 = {
+      name: 'kif22', mutant: false, t: 0,
+      toggleLabel() { return this.mutant ? 'Show normal KIF22' : 'Show disease variant'; },
+      toggle() { this.mutant = !this.mutant; this.reset(); },
+      reset() { this.t = 0; },
+      update(dt) { this.t += dt; if (this.t > 13.2) this.t = 0; },
+      draw() {
+        const t = this.t, cx = W / 2, cy = 196, mut = this.mutant;
+        const ANA = 3.6;                                   // anaphase onset
+        const a = ease((t - ANA) / 4.2);                  // anaphase progress
+        const fadeIn = Math.min(1, t / .6), fadeOut = Math.min(1, Math.max(0, 13.2 - t) / .6), vis = Math.min(fadeIn, fadeOut);
+        const sepEnd = mut ? 300 : 375, sepMeta = 255;
+        const half = lerp(sepMeta, sepEnd, a);            // pole distance from center
+        const xL = cx - half, xR = cx + half;
+        // chromatid travel: fraction of the way from the plate to a spot near the pole
+        const travel = a * (mut ? .42 : 1);
+        const k22on = mut ? 1 : 1 - ease((t - ANA) / .8);  // KIF22 switches off in anaphase (unless mutant)
+        const osc = t < ANA ? Math.sin(t * 2.2) * 6 : 0;
+        const rows = [-70, 0, 70];
+
+        // spindle microtubules: polar (interpolar) MTs that run past the chromosomes, and kinetochore MTs
+        const ph = t * 10;
+        const fan = [-118, -84, -50, -16, 16, 50, 84, 118];
+        for (const [px, dir] of [[xL, 1], [xR, -1]]) {
+          for (const yo of fan) {
+            const ex = cx + dir * 60, ey = cy + yo * 1.05;
+            mt(px, cy, ex, ey, ph, .5 * vis);
+          }
+          for (let k = 0; k < 6; k++) { const ang = Math.PI + (k - 2.5) * .32; mt(px, cy, px + dir * Math.cos(ang) * 46, cy + Math.sin(ang) * 46, 0, .35 * vis); }
+        }
+        // chromosomes: sister chromatids, kinetochore MT to each
+        rows.forEach((ry, i) => {
+          const y = cy + ry;
+          for (const dir of [-1, 1]) {                   // -1 = left sister, 1 = right sister
+            const px = dir < 0 ? xL : xR;
+            const plateX = cx + osc + dir * 11;
+            const goal = px - dir * 58;
+            const kx = lerp(plateX, goal, travel);
+            const ky = lerp(y, cy + ry * .55, travel);
+            mt(px, cy, kx, ky, ph * .6, .8 * vis);
+            // arms: bend away from the pole (polar ejection force); stronger when KIF22 is active in anaphase
+            const push = (k22on * (t >= ANA ? 1 : .35)) * (mut ? 1 : .4);
+            const drag = t >= ANA ? (1 - k22on) * .5 : 0;  // normal anaphase: arms trail behind toward center
+            const bend = -dir * (6 + 22 * push + 22 * drag);
+            ctx.globalAlpha = vis; ctx.strokeStyle = C.chr; ctx.lineWidth = 9; ctx.lineCap = 'round';
+            ctx.beginPath(); ctx.moveTo(kx + bend, ky - 22); ctx.quadraticCurveTo(kx, ky - 6, kx, ky); ctx.quadraticCurveTo(kx, ky + 6, kx + bend, ky + 22); ctx.stroke();
+            ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(kx, ky, 3, 0, 6.283); ctx.fill();   // kinetochore
+            // KIF22 on the arms, stepping toward plus ends (away from this pole)
+            const kcol = k22on > .5 ? C.k22 : C.off;
+            ctx.globalAlpha = vis * (.35 + .65 * Math.max(k22on, .25));
+            for (const s of [-1, 1]) {
+              const mx = kx + bend * .78 + dir * 9, my = ky + s * 16;   // on the pole-facing side of the arm
+              const st = Math.sin(t * 9 + i + s) * k22on * 2.5;
+              heads(mx - 4 + st, my, kcol, 5); heads(mx + 4 - st, my, kcol, 5);
+              if (k22on > .5) {                          // push arrow: away from the pole
+                ctx.strokeStyle = C.k22; ctx.lineWidth = 2; ctx.beginPath();
+                const ax = mx + dir * 28, bx = mx + dir * 11;
+                ctx.moveTo(ax, my); ctx.lineTo(bx, my); ctx.moveTo(bx + dir * 6, my - 5); ctx.lineTo(bx, my); ctx.lineTo(bx + dir * 6, my + 5); ctx.stroke();
+              }
+            }
+          }
+        });
+        pole(xL, cy, vis); pole(xR, cy, vis);
+        ctx.globalAlpha = 1;
+        legend([[C.k22, mut ? 'KIF22 disease variant' : 'KIF22 (chromokinesin)'], [C.chr, 'chromosomes'], [C.a, 'microtubules']]);
+        if (t < ANA) status('Metaphase: KIF22 pushes chromosome arms away from the poles');
+        else if (!mut) status('Anaphase: KIF22 switches off, and chromosomes and poles separate');
+        else status('Variant stays on in anaphase: chromosomes and poles fail to separate', C.k22);
+      }
+    };
+
+    // ================= KIF11 =================
+    const k11 = {
+      name: 'kif11', drug: false, t: 0, flux: 0,
+      toggleLabel() { return this.drug ? 'Remove KIF11 inhibitor' : 'Add KIF11 inhibitor'; },
+      toggle() { this.drug = !this.drug; this.reset(); },
+      reset() { this.t = 0; this.flux = 0; },
+      update(dt) {
+        this.t += dt; if (this.t > 12) this.t = 0;
+        const sliding = !this.drug && this.t > 1 && this.t < 8;
+        this.flux += dt * (this.drug ? 0 : sliding ? 26 : 12);
+      },
+      draw() {
+        const t = this.t, cx = W / 2, cy = 196, drug = this.drug;
+        const vis = Math.min(1, t / .6, Math.max(0, 12 - t) / .6);
+        const p = drug ? 0 : ease((t - 1) / 6.5);          // pole separation progress
+        const half = lerp(20, 250, p) + (drug ? Math.sin(t * 1.6) * 3 : 0);
+        const xL = cx - half, xR = cx + half;
+        const reach = Math.max(half, 78);
+        // chromosomes: ring around a monopolar aster -> line up at the plate of a bipolar spindle
+        const nCh = 8;
+        for (let i = 0; i < nCh; i++) {
+          const ang = (i / nCh) * 6.283 + .4;
+          const rx = cx + Math.cos(ang) * 150, ry = cy + Math.sin(ang) * 112;
+          const mx = cx + (i % 2 ? 5 : -5), my = cy - 140 + (i + .5) * 280 / nCh;
+          const f = drug ? 0 : ease((p - .45) / .55);
+          const x = lerp(rx, mx, f), y = lerp(ry, my, f);
+          ctx.globalAlpha = vis * .75; ctx.strokeStyle = C.chr; ctx.lineWidth = 6; ctx.lineCap = 'round';
+          ctx.beginPath(); ctx.moveTo(x - 7, y - 9); ctx.lineTo(x + 7, y + 9); ctx.moveTo(x + 7, y - 9); ctx.lineTo(x - 7, y + 9); ctx.stroke();
+        }
+        // antiparallel pairs crosslinked by KIF11
+        const pairs = [-66, -22, 22, 66];
+        const yAt = (px, ax, ay, x) => cy + (ay - cy) * (x - px) / (ax - px);
+        pairs.forEach(yk => {
+          const aimL = [xL + reach, cy + yk - 7], aimR = [xR - reach, cy + yk + 7];
+          const ext = 60;
+          const dL = Math.hypot(aimL[0] - xL, aimL[1] - cy), dR = Math.hypot(aimR[0] - xR, aimR[1] - cy);
+          mt(xL, cy, xL + (aimL[0] - xL) * (dL + ext) / dL, cy + (aimL[1] - cy) * (dL + ext) / dL, -this.flux, .85 * vis);
+          mt(xR, cy, xR + (aimR[0] - xR) * (dR + ext) / dR, cy + (aimR[1] - cy) * (dR + ext) / dR, -this.flux, .85 * vis);
+        });
+        // extra spindle and astral microtubules
+        const nRay = drug ? 14 : 8;
+        for (const [px, dir] of [[xL, 1], [xR, -1]]) {
+          for (let k = 0; k < nRay; k++) {
+            const span = drug ? 2.6 : 1.5, ang = (k / (nRay - 1) - .5) * span + (drug ? 0 : 0);
+            const len = drug ? 150 : 120;
+            mt(px, cy, px + dir * Math.cos(ang) * len, cy + Math.sin(ang) * len, -this.flux * .5, .45 * vis);
+          }
+          for (let k = 0; k < 5; k++) { const ang = Math.PI + (k - 2) * .38; mt(px, cy, px + dir * Math.cos(ang) * 50, cy + Math.sin(ang) * 50, 0, .35 * vis); }
+        }
+        // KIF11 tetramers bridging each antiparallel pair in the overlap
+        pairs.forEach((yk, i) => {
+          const aimL = [xL + reach, cy + yk - 7], aimR = [xR - reach, cy + yk + 7];
+          if (drug) {                                     // inhibited motors drift off with drug bound
+            const fx = 90 + i * 64 + Math.sin(t * .7 + i * 1.7) * 14, fy = 318 + (i % 2) * 10 + Math.cos(t * .9 + i) * 6;
+            ctx.globalAlpha = vis * .55;
+            ctx.strokeStyle = C.k11; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(fx - 12, fy - 10); ctx.lineTo(fx + 12, fy + 10); ctx.stroke();
+            heads(fx - 14, fy - 13, C.k11, 5); heads(fx - 9, fy - 15, C.k11, 5); heads(fx + 14, fy + 13, C.k11, 5); heads(fx + 9, fy + 15, C.k11, 5);
+            ctx.globalAlpha = vis; ctx.fillStyle = C.drug; ctx.beginPath(); ctx.arc(fx - 11, fy - 22, 4, 0, 6.283); ctx.fill(); ctx.beginPath(); ctx.arc(fx + 11, fy + 6, 4, 0, 6.283); ctx.fill();
+            return;
+          }
+          for (const u of [-26, 22]) {
+            const x = cx + u + ((i % 2) ? 6 : -6);
+            const y1 = yAt(xL, aimL[0], aimL[1], x), y2 = yAt(xR, aimR[0], aimR[1], x);
+            const top = Math.min(y1, y2), bot = Math.max(y1, y2);
+            const st = Math.sin(t * 8 + i * 2 + u) * 3;
+            ctx.globalAlpha = vis; ctx.strokeStyle = C.k11; ctx.lineWidth = 3;
+            ctx.beginPath(); ctx.moveTo(x, top - 3); ctx.lineTo(x, bot + 3); ctx.stroke();
+            // one head pair on each microtubule, stepping toward that microtubule's plus end (away from its pole)
+            const onL = y1 < y2 ? -1 : 1;
+            heads(x - 5 + st, top - 5, C.k11, 5); heads(x + 5 - st, top - 5, C.k11, 5);
+            heads(x - 5 - st, bot + 5, C.k11, 5); heads(x + 5 + st, bot + 5, C.k11, 5);
+            void onL;
+          }
+        });
+        pole(xL, cy, vis); pole(xR, cy, vis);
+        ctx.globalAlpha = 1;
+        // sliding arrows under the spindle
+        if (!drug && t > 1 && t < 8) {
+          ctx.strokeStyle = C.k11; ctx.lineWidth = 2; ctx.globalAlpha = .8 * vis;
+          for (const dir of [-1, 1]) { const x0 = cx + dir * 30, x1 = cx + dir * 90, y = cy + 138; ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.moveTo(x1 - dir * 7, y - 5); ctx.lineTo(x1, y); ctx.lineTo(x1 - dir * 7, y + 5); ctx.stroke(); }
+          ctx.globalAlpha = 1;
+        }
+        const lg = [[C.k11, 'KIF11 (kinesin-5)'], [C.chr, 'chromosomes'], [C.a, 'microtubules']];
+        if (drug) lg.push([C.drug, 'KIF11 inhibitor']);
+        legend(lg);
+        if (drug) status('KIF11 inhibited: monopolar spindle', C.drug);
+        else if (t < 1.2) status('Poles start side by side');
+        else if (t < 7.5) status('KIF11 slides antiparallel microtubules apart');
+        else status('Bipolar spindle');
+      }
+    };
+
+    // ================= KIFBP =================
+    const MY = 268, MX0 = 40, MX1 = 860;
+    const bp = {
+      name: 'kifbp', on: true, motors: [], bps: [],
+      toggleLabel() { return this.on ? 'Remove KIFBP' : 'Restore KIFBP'; },
+      toggle() { this.on = !this.on; for (const m of this.motors) if (m.st === 'held') { m.st = 'sol'; m.land = rnd(.5, 2); } for (const b of this.bps) b.m = null; },
+      reset() {
+        this.motors = []; this.bps = [];
+        for (let i = 0; i < 12; i++) this.motors.push({ kind: i % 3 === 2 ? 'k15' : 'k18', st: 'sol', x: rnd(80, 820), y: rnd(70, 190), vx: rnd(-14, 14), vy: rnd(-8, 8), land: rnd(.5, 5), ph: rnd(0, 6) });
+        for (let i = 0; i < 7; i++) this.bps.push({ x: rnd(80, 820), y: rnd(70, 190), vx: rnd(-16, 16), vy: rnd(-9, 9), m: null, hold: 0, cool: rnd(0, 2), rot: rnd(0, 6) });
+        for (let i = 0; i < 600; i++) this.update(1 / 30);
+      },
+      update(dt) {
+        const drift = o => { o.x += o.vx * dt; o.y += o.vy * dt; if (o.x < 60 || o.x > 840) o.vx *= -1; if (o.y < 64 || o.y > 196) o.vy *= -1; o.vx += rnd(-6, 6) * dt; o.vy += rnd(-6, 6) * dt; o.vx = Math.max(-18, Math.min(18, o.vx)); o.vy = Math.max(-10, Math.min(10, o.vy)); };
+        for (const b of this.bps) {
+          b.rot += dt * .5;
+          if (!this.on) continue;
+          drift(b); b.cool -= dt;
+          if (b.m) { b.hold -= dt; b.m.x = b.x + 4; b.m.y = b.y + 18; if (b.hold <= 0) { b.m.st = 'sol'; b.m.land = rnd(1, 3); b.m = null; b.cool = 1.2; } }
+          else if (b.cool <= 0) {
+            const m = this.motors.find(m => m.st === 'sol' && Math.hypot(m.x - b.x, m.y - b.y) < 70);
+            if (m) { m.st = 'held'; b.m = m; b.hold = rnd(8, 13); }
+          }
+        }
+        for (const m of this.motors) {
+          m.ph += dt;
+          if (m.st === 'sol') { drift(m); m.land -= dt; if (m.land <= 0) { m.st = 'land'; m.tx = Math.max(70, Math.min(700, m.x)); } }
+          else if (m.st === 'land') { m.x += (m.tx - m.x) * Math.min(1, dt * 2); m.y += 70 * dt; if (m.y >= MY - 30) { m.y = MY - 30; m.st = 'walk'; } }
+          else if (m.st === 'walk') {
+            m.x += 34 * dt;
+            if (m.x > MX1 - 14 || Math.random() < dt * .07) { m.st = 'up'; }
+          } else if (m.st === 'up') { m.y -= 50 * dt; m.x += 6 * dt; if (m.y < 150) { m.st = 'sol'; m.vy = -6; m.land = rnd(1, 3); if (m.x > 820) m.x = rnd(100, 500); } }
+        }
+      },
+      drawMotor(m) {
+        const col = m.kind === 'k15' ? C.k15 : C.pink;
+        const walking = m.st === 'walk';
+        const s = walking ? (m.ph * 4) % 1 : 0;
+        const hy = m.y + 21;
+        let ax = m.x - 7, bx = m.x + 7, ay = hy, by = hy;
+        if (walking) { const lift = Math.sin(s * Math.PI) * 8; if (Math.floor(m.ph * 4) % 2) { ax += s * 14 - 7; ay -= lift; } else { bx += s * 14 - 7; by -= lift; } }
+        ctx.strokeStyle = col; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.moveTo(ax, ay - 4); ctx.lineTo(m.x, m.y + 6); ctx.lineTo(bx, by - 4); ctx.stroke();
+        ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(m.x, m.y + 6);
+        for (let i = 1; i <= 5; i++) ctx.lineTo(m.x + (i % 2 ? 2 : -2), m.y + 6 - i * 5); ctx.stroke();
+        heads(ax, ay, col, 7.5); heads(bx, by, col, 7.5);
+      },
+      draw() {
+        // microtubule
+        for (let r = 2; r >= 0; r--) { const y = MY + (r - 1) * 9; ctx.globalAlpha = r === 1 ? 1 : .8; for (let x = MX0 + r * 5; x < MX1; x += 20) { ctx.fillStyle = C.a; ctx.fillRect(x + 1, y - 4, 8.5, 8); ctx.fillStyle = C.b; ctx.fillRect(x + 10.5, y - 4, 8.5, 8); } }
+        ctx.globalAlpha = 1;
+        ctx.font = '600 17px "IBM Plex Mono", ui-monospace, monospace'; ctx.fillStyle = C.mut;
+        ctx.textAlign = 'left'; ctx.fillText('− end', MX0, MY + 44); ctx.textAlign = 'right'; ctx.fillText('+ end', MX1, MY + 44);
+        for (const m of this.motors) if (m.st !== 'held') this.drawMotor(m);
+        // KIFBP: a curved clamp that wraps the motor heads
+        if (this.on) for (const b of this.bps) {
+          if (b.m) this.drawMotor(b.m);
+          ctx.save(); ctx.translate(b.x, b.y + (b.m ? 0 : 0)); ctx.rotate(b.m ? 0 : Math.sin(b.rot) * .6);
+          ctx.fillStyle = 'rgba(185,166,255,.22)'; ctx.strokeStyle = C.bp; ctx.lineWidth = 2.5;
+          const ry = b.m ? 41 : 24;
+          ctx.beginPath(); ctx.ellipse(4, b.m ? 30 : 10, b.m ? 24 : 20, b.m ? 19 : 14, 0, Math.PI * .15, Math.PI * .85, true); ctx.closePath(); ctx.fill(); ctx.stroke();
+          void ry;
+          ctx.restore();
+        }
+        const onMT = this.motors.filter(m => m.st === 'walk' || m.st === 'land').length;
+        legend([[C.pink, 'KIF18A'], [C.k15, 'KIF15'], [C.bp, 'KIFBP'], [C.a, 'microtubule']]);
+        ctx.font = '500 16px "IBM Plex Mono", ui-monospace, monospace'; ctx.textAlign = 'center'; ctx.fillStyle = C.mut;
+        ctx.fillText('motors on the microtubule: ' + onMT, W / 2, MY + 44);
+        if (this.on) status('KIFBP grabs motor heads and holds them off the microtubule', C.bp);
+        else status('Without KIFBP, too many motors bind the microtubule', C.pink);
+      }
+    };
+
+    const scenes = { kif22: k22, kif11: k11, kifbp: bp };
+    let cur = k22;
+    k22.reset(); k11.reset(); bp.reset();
+
+    const toggleBtn = document.getElementById('kin-variant');
+    const pauseBtn = document.getElementById('kin-pause');
+    const tabs = Array.from(document.querySelectorAll('.kin-tabs [role="tab"]'));
+    const caps = Array.from(document.querySelectorAll('.kin-cap'));
+    function frame() { ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H); cur.draw(); }
+    function select(name) {
+      cur = scenes[name];
+      tabs.forEach(b => { const on = b.dataset.scene === name; b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1; });
+      caps.forEach(c => { c.hidden = c.dataset.scene !== name; });
+      toggleBtn.textContent = cur.toggleLabel();
+      if (reduceMotion) still();
+      frame();
+    }
+    function still() { if (cur === k22) k22.t = cur.mutant ? 9 : 9; if (cur === k11) { k11.t = cur.drug ? 5 : 9; } }
+    tabs.forEach((b, i) => {
+      b.addEventListener('click', () => select(b.dataset.scene));
+      b.addEventListener('keydown', e => { const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (d) { const n = tabs[(i + d + tabs.length) % tabs.length]; n.focus(); select(n.dataset.scene); } });
+    });
+    toggleBtn.addEventListener('click', () => { cur.toggle(); toggleBtn.textContent = cur.toggleLabel(); if (reduceMotion) still(); frame(); });
+
+    let running = !reduceMotion, visible = false, last = 0, raf = 0;
+    function loop(ts) {
+      const dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts;
+      cur.update(dt); frame();
+      if (running && visible) raf = requestAnimationFrame(loop);
+    }
+    function start() { cancelAnimationFrame(raf); last = performance.now(); raf = requestAnimationFrame(loop); }
+    function setRunning(v) { running = v; pauseBtn.textContent = v ? 'Pause' : 'Play'; pauseBtn.setAttribute('aria-pressed', String(!v)); if (v && visible) start(); }
+    pauseBtn.addEventListener('click', () => setRunning(!running));
+    if ('IntersectionObserver' in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && running) start(); }).observe(cv);
+    else visible = true;
+    k22.t = 2; k11.t = 3;
+    select('kif22');
+    if (reduceMotion) { still(); frame(); }
+    setRunning(running);
+    window.__kinAnim = { setRunning, select, scenes };
   })();
 
   // ---- pause / play all movies ----
