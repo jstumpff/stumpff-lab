@@ -428,10 +428,10 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
     <div class="hero-media">
     <figure class="motor-fig">
       <div class="motor-frame">
-        <canvas id="motor-anim" width="900" height="340" role="img" aria-label="Animation of kinesin motor proteins walking hand-over-hand along a microtubule toward its plus end. Some carry cargo; kinesin-8 motors gather at the growing end and pause its growth, after which the microtubule shrinks and then regrows."></canvas>
+        <canvas id="motor-anim" width="900" height="340" role="img" aria-label="Animation of kinesin motor proteins walking hand-over-hand along a microtubule toward its plus end. Some carry cargo; kinesin-8 (KIF18A) motors collect at the growing end, and once several arrive, the microtubule stops both growing and shrinking."></canvas>
         <button type="button" class="motor-toggle" id="motor-toggle" aria-pressed="false">Pause</button>
       </div>
-      <figcaption>Kinesins are motor proteins that walk along microtubules, one 8-nanometer step at a time, powered by ATP. Some carry cargo through the cell. Others, like KIF18A, gather at microtubule ends and control their growth. (Animation; not to scale.)</figcaption>
+      <figcaption>Kinesins are motor proteins that walk along microtubules, one 8-nanometer step at a time, powered by ATP. Some carry cargo through the cell. Others, like KIF18A, collect at microtubule ends and stop them from growing or shrinking. (Animation; not to scale.)</figcaption>
     </figure>
     <figure>
       <img src="media/hero-spindle.jpg" alt="Fluorescence image of a human mitotic spindle: green microtubules fan out from two poles around blue chromosomes aligned at the center" width="1400" height="1400">
@@ -935,13 +935,14 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
     const rowY = r => YC + (r - 1) * (ROWH + 1);           // row centers
     const TOP = rowY(0) - ROWH / 2;                           // lattice top surface
     const STAG = [0, 0.34, 0.67];                             // helical stagger (dimers)
-    const MAXL = 30, MINL = 15;
-    const len = [21, 21, 20];                                 // dimers per protofilament row
+    const MAXL = 30, SEED = [13, 13, 12];
+    const len = SEED.slice();                                 // dimers per protofilament row
     const C = { a: '#7fe0a3', b: '#3fae74', edge: 'rgba(0,0,0,.35)', gold: '#f1c75b', pink: '#ff7ab6',
                 ves: 'rgba(181,140,255,.28)', vesE: '#b58cff', ink: '#e8eeea', mut: '#93a39b', bg: '#071012' };
 
-    let phase = 'grow', phaseT = 0, growT = 0, shrinkT = 0, spawnT = 1.2, spawnN = 0, t = 0;
-    const motors = [], flakes = [], free = [];
+    let phase = 'grow', phaseT = 0, growT = 0, spawnT = .6, spawnN = 0, t = 0, fade = 0;
+    const NCAP = 3, HOLD = 6.5;                               // KIF18A needed to cap the end; how long the cap is shown
+    const motors = [], free = [];
     for (let i = 0; i < 14; i++) free.push({ x: Math.random() * W, y: 40 + Math.random() * (H - 90), vx: (Math.random() - .5) * 10, vy: (Math.random() - .5) * 6, a: Math.random() * 6.28 });
 
     const rowEndX = r => X0 + (STAG[r] + len[r]) * D;
@@ -949,7 +950,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
     const headX = i => X0 + (STAG[0] + i + 0.5) * D;
 
     function spawn() {
-      const kind = spawnN++ % 3 === 1 ? 'cargo' : 'k8';
+      const kind = spawnN++ % 4 === 1 ? 'cargo' : 'k8';
       motors.push({ kind, rear: 0, front: 1, stepping: 0, dwell: .2 + Math.random() * .3, state: 'walk', y: 0, alpha: 0, vy: 0 });
     }
 
@@ -958,29 +959,22 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
       // free tubulin drifting in solution
       for (const f of free) { f.x += f.vx * dt; f.y += f.vy * dt; f.a += dt * .4; if (f.x < -20) f.x = W + 20; if (f.x > W + 20) f.x = -20; if (f.y < 30 || f.y > H - 50) f.vy *= -1; }
       // spawn motors at the minus end
-      spawnT -= dt; if (spawnT <= 0) { spawn(); spawnT = 2.1 + Math.random() * 1.2; }
+      spawnT -= dt; if (spawnT <= 0) { spawn(); spawnT = 1.3 + Math.random() * .7; }
 
-      const k8AtTip = motors.filter(m => m.kind === 'k8' && m.state === 'tip').length;
+      // KIF18A molecules packed at the plus end (the one at the tip plus those queued right behind it)
+      const k8AtTip = motors.filter(m => m.kind === 'k8' && (m.state === 'tip' || m.state === 'walk') && m.front >= tipIdx() - 2 * (NCAP - 1)).length;
       if (phase === 'grow') {
         growT -= dt;
-        if (growT <= 0) { let r = 0; for (let i = 1; i < NROW; i++) if (len[i] + STAG[i] < len[r] + STAG[r]) r = i; if (len[r] < MAXL) len[r]++; growT = .32; }
-        if (k8AtTip >= 2) { phase = 'paused'; phaseT = 0; }
-        else if (Math.min(...len) >= MAXL) { phase = 'shrink'; phaseT = 0; }
-      } else if (phase === 'paused') {
-        if (phaseT > 3.2) { phase = 'shrink'; phaseT = 0; }
-      } else if (phase === 'shrink') {
-        shrinkT -= dt;
-        if (shrinkT <= 0) {
-          let r = 0; for (let i = 1; i < NROW; i++) if (len[i] + STAG[i] > len[r] + STAG[r]) r = i;
-          if (len[r] > MINL) {
-            const x = X0 + (STAG[r] + len[r] - 1) * D, y = rowY(r);
-            flakes.push({ x, y, vx: 30 + Math.random() * 30, vy: (r - 1) * 45 + (r === 1 ? -20 : 0) + (Math.random() - .5) * 20, rot: 0, vr: (r === 2 ? 1 : -1) * (2 + Math.random() * 2), life: 1.4 });
-            len[r]--;
-          }
-          shrinkT = .085;
-        }
-        if (Math.max(...len) <= MINL + 1) { phase = 'grow'; phaseT = 0; }
+        if (growT <= 0) { let r = 0; for (let i = 1; i < NROW; i++) if (len[i] + STAG[i] < len[r] + STAG[r]) r = i; if (len[r] < MAXL) len[r]++; growT = .42; }
+        if (k8AtTip >= NCAP) { phase = 'capped'; phaseT = 0; }
+        else if (Math.min(...len) >= MAXL) { phase = 'reset'; phaseT = 0; }
+      } else if (phase === 'capped') {
+        if (phaseT > HOLD) { phase = 'reset'; phaseT = 0; }   // length frozen: no growth, no shortening
+      } else if (phase === 'reset') {
+        fade = Math.min(1, phaseT / .7);
+        if (phaseT > .7) { len.splice(0, 3, ...SEED); motors.length = 0; spawnN = 0; spawnT = .3; phase = 'grow'; phaseT = 0; }
       }
+      if (phase === 'grow' && fade > 0) fade = Math.max(0, fade - dt / .7);
 
       // motors: hand-over-hand, 8 nm per step, plus-end directed
       motors.sort((a, b) => b.front - a.front);
@@ -988,24 +982,24 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
         const m = motors[k];
         if (m.state === 'walk') {
           m.alpha = Math.min(1, m.alpha + dt * 3);
-          const ahead = motors.slice(0, k).find(o => o.state !== 'gone' && o.state !== 'free');
+          let ahead = null; for (let j = k - 1; j >= 0; j--) if (motors[j].state === 'walk' || motors[j].state === 'tip') { ahead = motors[j]; break; }
           const limit = ahead ? ahead.rear - 1 : tipIdx();
           if (m.stepping > 0) {
             m.stepping += dt / .2;
             if (m.stepping >= 1) { m.stepping = 0; const r = m.rear; m.rear = m.front; m.front = r + 2; m.dwell = .12 + Math.random() * .22; }
           } else {
             m.dwell -= dt;
-            if (m.dwell <= 0) { if (m.front + 1 <= limit) m.stepping = .001; else if (m.front >= tipIdx()) m.state = m.kind === 'k8' ? 'tip' : 'free'; }
+            if (m.dwell <= 0) { if (m.front + 1 <= limit) m.stepping = .001; else if (m.front >= tipIdx()) m.state = m.kind === 'k8' ? 'tip' : 'free'; else if (m.kind === 'cargo' && (m.front >= tipIdx() - 6 || phase === 'capped')) m.state = 'free'; }   // cargo kinesins let go when blocked near the end
           }
           if (m.front > tipIdx() || m.rear > tipIdx()) m.state = 'free';
         } else if (m.state === 'tip') {
-          if (phase === 'shrink' || m.front > tipIdx()) m.state = 'free';
+          if (m.front > tipIdx()) m.state = 'free';
+          else if (m.front < tipIdx() && phase === 'grow') { m.state = 'walk'; m.dwell = .1; }   // follow the growing end
         } else if (m.state === 'free') {
           m.vy -= dt * 30; m.y += m.vy * dt; m.alpha -= dt * .8; if (m.alpha <= 0) m.state = 'gone';
         }
       }
       for (let i = motors.length - 1; i >= 0; i--) if (motors[i].state === 'gone') motors.splice(i, 1);
-      for (let i = flakes.length - 1; i >= 0; i--) { const f = flakes[i]; f.x += f.vx * dt; f.y += f.vy * dt; f.rot += f.vr * dt; f.life -= dt; if (f.life <= 0) flakes.splice(i, 1); }
     }
 
     function dimer(x, y, rot, alpha) {
@@ -1048,13 +1042,17 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
       for (let r = NROW - 1; r >= 0; r--) {
         const shade = r === 1 ? 1 : .82;
         for (let i = 0; i < len[r]; i++) {
-          const fresh = phase === 'grow' && i === len[r] - 1 ? Math.min(1, (0.32 - growT) / 0.2 + .3) : 1;
+          const fresh = phase === 'grow' && i === len[r] - 1 ? Math.min(1, (0.42 - growT) / 0.2 + .3) : 1;
           dimer(X0 + (STAG[r] + i) * D, rowY(r), 0, shade * fresh);
         }
       }
-      // curling protofilament ends while shrinking
-      if (phase === 'shrink') for (const r of [0, 2]) { const x = X0 + (STAG[r] + len[r]) * D; dimer(x, rowY(r), (r === 0 ? -1 : 1) * .45, .85); dimer(x + D * .86, rowY(r) + (r === 0 ? -1 : 1) * 10, (r === 0 ? -1 : 1) * .95, .7); }
-      for (const f of flakes) dimer(f.x, f.y, f.rot, Math.max(0, f.life / 1.4) * .8);
+      // soft pink glow marks the capped plus end
+      if (phase === 'capped') {
+        const gx = Math.max(...[0, 1, 2].map(rowEndX)), a = Math.min(1, phaseT / .6) * (.55 + .2 * Math.sin(phaseT * 3));
+        const g = ctx.createRadialGradient(gx, YC, 4, gx, YC, 70);
+        g.addColorStop(0, 'rgba(255,122,182,' + (.45 * a) + ')'); g.addColorStop(1, 'rgba(255,122,182,0)');
+        ctx.fillStyle = g; ctx.fillRect(gx - 70, YC - 70, 140, 140);
+      }
       for (const m of motors) drawMotor(m);
 
       // labels
@@ -1069,13 +1067,14 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
       label('8 nm = one step', sx + D + 10, YC + 74, C.mut);
       // status
       ctx.font = '600 19px "Schibsted Grotesk", system-ui, sans-serif';
-      const st = phase === 'grow' ? 'microtubule growing' : phase === 'paused' ? 'growth paused by kinesin-8' : 'microtubule shrinking';
-      const stc = phase === 'paused' ? C.pink : C.ink;
+      const st = phase === 'capped' ? 'KIF18A at the end: growth and shrinking stop' : 'microtubule growing';
+      const stc = phase === 'capped' ? C.pink : C.ink;
       ctx.textAlign = 'right'; ctx.fillStyle = stc; ctx.fillText(st, W - 24, H - 22);
       // legend
       ctx.textAlign = 'left'; ctx.font = '500 19px "Schibsted Grotesk", system-ui, sans-serif';
       const lg = [[C.gold, 'kinesin carrying cargo'], [C.pink, 'kinesin-8 (KIF18A)'], [C.a, 'tubulin']];
       lg.forEach(([c, s], i) => { ctx.fillStyle = c; ctx.beginPath(); ctx.arc(30, 32 + i * 28, 8, 0, 6.283); ctx.fill(); ctx.fillStyle = C.ink; ctx.fillText(s, 48, 39 + i * 28); });
+      if (fade > 0) { ctx.globalAlpha = fade; ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; }
     }
 
     if (!CanvasRenderingContext2D.prototype.roundRect) CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h) { this.rect(x, y, w, h); };
@@ -1093,6 +1092,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
     if ('IntersectionObserver' in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && running) start(); }).observe(cv);
     // warm up so the first frame already shows motors on the lattice
     for (let i = 0; i < 360; i++) update(1 / 60);
+    if (reduceMotion) for (let i = 0; i < 6000 && !(phase === 'capped' && phaseT > 1); i++) update(1 / 60);   // still frame shows the capped end
     draw();
     setRunning(running);
     window.__motorAnim = { setRunning };
