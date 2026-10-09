@@ -509,7 +509,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
           <a class="kin-jump" href="#cin-anim">KIF18A <span aria-hidden="true">↓</span><span class="sr">: see the animation in the cancer section</span></a>
         </div>
         <div class="motor-frame kin-frame" id="kin-panel" role="tabpanel">
-          <canvas id="kin-anim" width="900" height="380" role="img" aria-label="Animations of three proteins the lab studies. KIF22 pushes chromosome arms away from spindle poles and normally switches off in anaphase; a disease variant stays on. KIF11 slides antiparallel microtubules apart to separate spindle poles; with an inhibitor the spindle stays monopolar. KIFBP binds kinesin motor heads and keeps them off microtubules."></canvas>
+          <canvas id="kin-anim" width="900" height="380" role="img" aria-label="Animations of three proteins the lab studies. KIF22 pushes chromosome arms away from spindle poles and normally switches off in anaphase; a disease variant stays on. KIF11 slides antiparallel microtubules apart to separate spindle poles; with an inhibitor the spindle stays monopolar. KIFBP binds kinesin motor heads and keeps them off microtubules; a button shows loss of KIFBP, as in Goldberg-Shprintzen syndrome."></canvas>
           <div class="kin-ctrls"><button type="button" class="kin-btn" id="kin-variant">Show disease variant</button><button type="button" class="kin-btn" id="kin-pause" aria-pressed="false">Pause</button></div>
         </div>
         <figcaption>
@@ -517,7 +517,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
           <p class="kin-cap kin-see" data-scene="kif22"><b>See this in actual cells:</b> <a href="#mov-kif22-anaphase">anaphase movements</a> · <a href="#mov-kif22-recongression">chromosome recongression</a> · <a href="#mov-kif22-cytokinesis">cytokinesis failure</a> · <a href="#mov-kif22-chondrocytes">chondrocyte division</a></p>
           <p class="kin-cap" data-scene="kif11" hidden><b>KIF11</b> (kinesin-5, also called Eg5) is a four-headed motor that links two microtubules pointing in opposite directions and walks toward the plus end of each, sliding them apart to push the spindle poles away from each other. Blocking KIF11 leaves cells with a monopolar spindle. We study how modifications in its motor domain tune its force output. <a href="https://doi.org/10.1073/pnas.1718290115">Muretta et al., <i>PNAS</i> 2018</a>; <a href="https://doi.org/10.1073/pnas.2602415123">Šemić et al., <i>PNAS</i> 2026</a>.</p>
           <p class="kin-cap kin-see" data-scene="kif11" hidden><b>See this in actual cells:</b> <a href="#mov-kif11-assembly">spindle assembly after a KIF11 inhibitor is washed out</a></p>
-          <p class="kin-cap" data-scene="kifbp" hidden><b>Kinesin-family binding protein (KIFBP)</b> binds the motor heads of a subset of kinesins, including KIF18A and KIF15, on the surface the head would use to bind a microtubule, and remodels the head so it can't bind. Each KIFBP binds one head. In dividing cells it acts as a buffer that protects against too much motor activity. <a href="https://doi.org/10.1083/jcb.201806195">Malaby et al., <i>JCB</i> 2019</a>; <a href="https://doi.org/10.1126/sciadv.abj9812">Solon et al., <i>Sci Adv</i> 2021</a>; <a href="https://doi.org/10.64898/2026.07.17.739260">Paschall et al., <i>bioRxiv</i> 2026</a>.</p>
+          <p class="kin-cap" data-scene="kifbp" hidden><b>Kinesin-family binding protein (KIFBP)</b> binds the motor heads of a subset of kinesins, including KIF18A and KIF15, on the surface the head would use to bind a microtubule, and remodels the head so it can't bind. Each KIFBP binds one head. In dividing cells it acts as a buffer that protects against too much motor activity. Loss of KIFBP function causes Goldberg-Shprintzen syndrome (GOSHS), a rare recessive disorder marked by a small head, intellectual disability, brain abnormalities, and, in most patients, Hirschsprung disease, in which the colon lacks nerve cells. <a href="https://doi.org/10.1083/jcb.201806195">Malaby et al., <i>JCB</i> 2019</a>; <a href="https://doi.org/10.1126/sciadv.abj9812">Solon et al., <i>Sci Adv</i> 2021</a>; <a href="https://doi.org/10.64898/2026.07.17.739260">Paschall et al., <i>bioRxiv</i> 2026</a>.</p>
           <p class="kin-note">Animations; not to scale.</p>
         </figcaption>
       </figure>
@@ -1369,7 +1369,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
     const MY = 268, MX0 = 40, MX1 = 860;
     const bp = {
       name: 'kifbp', on: true, motors: [], bps: [],
-      toggleLabel() { return this.on ? 'Remove KIFBP' : 'Restore KIFBP'; },
+      toggleLabel() { return this.on ? 'Loss of KIFBP (GOSHS)' : 'Restore KIFBP'; },
       toggle() { this.on = !this.on; for (const m of this.motors) { m.bp = [null, null]; if (m.st === 'held') { m.st = 'sol'; m.land = rnd(.5, 2); } } for (const b of this.bps) b.m = null; },
       reset() {
         this.motors = []; this.bps = [];
@@ -1446,7 +1446,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
         ctx.font = '500 16px "IBM Plex Mono", ui-monospace, monospace'; ctx.textAlign = 'center'; ctx.fillStyle = C.mut;
         ctx.fillText('motors on the microtubule: ' + onMT, W / 2, MY + 44);
         if (this.on) status('KIFBP binds the microtubule-binding face of motor heads', C.bp);
-        else status('Without KIFBP, too many motors bind the microtubule', C.pink);
+        else status('Loss of KIFBP (GOSHS): too many motors bind the microtubule', C.pink);
       }
     };
 
