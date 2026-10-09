@@ -517,7 +517,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
           <p class="kin-cap kin-see" data-scene="kif22"><b>See this in actual cells:</b> <a href="#mov-kif22-anaphase">anaphase movements</a> · <a href="#mov-kif22-recongression">chromosome recongression</a> · <a href="#mov-kif22-cytokinesis">cytokinesis failure</a> · <a href="#mov-kif22-chondrocytes">chondrocyte division</a></p>
           <p class="kin-cap" data-scene="kif11" hidden><b>KIF11</b> (kinesin-5, also called Eg5) is a four-headed motor that links two microtubules pointing in opposite directions and walks toward the plus end of each, sliding them apart to push the spindle poles away from each other. Blocking KIF11 leaves cells with a monopolar spindle. We study how modifications in its motor domain tune its force output. <a href="https://doi.org/10.1073/pnas.1718290115">Muretta et al., <i>PNAS</i> 2018</a>; <a href="https://doi.org/10.1073/pnas.2602415123">Šemić et al., <i>PNAS</i> 2026</a>.</p>
           <p class="kin-cap kin-see" data-scene="kif11" hidden><b>See this in actual cells:</b> <a href="#mov-kif11-assembly">spindle assembly after a KIF11 inhibitor is washed out</a></p>
-          <p class="kin-cap" data-scene="kifbp" hidden><b>Kinesin-binding protein (KIFBP)</b> grabs the motor domains of a subset of kinesins, including KIF18A and KIF15, and remodels them so they can't bind microtubules. In dividing cells it acts as a buffer that protects against too much motor activity. <a href="https://doi.org/10.1083/jcb.201806195">Malaby et al., <i>JCB</i> 2019</a>; <a href="https://doi.org/10.1126/sciadv.abj9812">Solon et al., <i>Sci Adv</i> 2021</a>.</p>
+          <p class="kin-cap" data-scene="kifbp" hidden><b>Kinesin-binding protein (KIFBP)</b> binds the motor heads of a subset of kinesins, including KIF18A and KIF15, on the surface the head would use to bind a microtubule, and remodels the head so it can't bind. Each KIFBP binds one head. In dividing cells it acts as a buffer that protects against too much motor activity. <a href="https://doi.org/10.1083/jcb.201806195">Malaby et al., <i>JCB</i> 2019</a>; <a href="https://doi.org/10.1126/sciadv.abj9812">Solon et al., <i>Sci Adv</i> 2021</a>.</p>
           <p class="kin-note">Animations; not to scale.</p>
         </figcaption>
       </figure>
@@ -1369,33 +1369,47 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
     const bp = {
       name: 'kifbp', on: true, motors: [], bps: [],
       toggleLabel() { return this.on ? 'Remove KIFBP' : 'Restore KIFBP'; },
-      toggle() { this.on = !this.on; for (const m of this.motors) if (m.st === 'held') { m.st = 'sol'; m.land = rnd(.5, 2); } for (const b of this.bps) b.m = null; },
+      toggle() { this.on = !this.on; for (const m of this.motors) { m.bp = [null, null]; if (m.st === 'held') { m.st = 'sol'; m.land = rnd(.5, 2); } } for (const b of this.bps) b.m = null; },
       reset() {
         this.motors = []; this.bps = [];
-        for (let i = 0; i < 12; i++) this.motors.push({ kind: i % 3 === 2 ? 'k15' : 'k18', st: 'sol', x: rnd(80, 820), y: rnd(70, 190), vx: rnd(-14, 14), vy: rnd(-8, 8), land: rnd(.5, 5), ph: rnd(0, 6) });
-        for (let i = 0; i < 7; i++) this.bps.push({ x: rnd(80, 820), y: rnd(70, 190), vx: rnd(-16, 16), vy: rnd(-9, 9), m: null, hold: 0, cool: rnd(0, 2), rot: rnd(0, 6) });
+        for (let i = 0; i < 12; i++) this.motors.push({ kind: i % 3 === 2 ? 'k15' : 'k18', st: 'sol', x: rnd(80, 820), y: rnd(100, 180), vx: rnd(-14, 14), vy: rnd(-8, 8), land: rnd(.5, 5), ph: rnd(0, 6), bp: [null, null] });
+        for (let i = 0; i < 10; i++) this.bps.push({ x: rnd(80, 820), y: rnd(100, 180), vx: rnd(-16, 16), vy: rnd(-9, 9), m: null, h: 0, hold: 0, cool: rnd(0, 2), rot: rnd(0, 6) });
         for (let i = 0; i < 600; i++) this.update(1 / 30);
       },
+      // where a head sits (h = 0 left, 1 right) on a motor in solution
+      headPos(m, h) { const sp = m.st === 'held' ? 12 : 7; return [m.x + (h ? sp : -sp), m.y + 21]; },
       update(dt) {
-        const drift = o => { o.x += o.vx * dt; o.y += o.vy * dt; if (o.x < 60 || o.x > 840) o.vx *= -1; if (o.y < 64 || o.y > 196) o.vy *= -1; o.vx += rnd(-6, 6) * dt; o.vy += rnd(-6, 6) * dt; o.vx = Math.max(-18, Math.min(18, o.vx)); o.vy = Math.max(-10, Math.min(10, o.vy)); };
+        const drift = (o, k) => { k = k || 1; o.x += o.vx * dt * k; o.y += o.vy * dt * k; if (o.x < 200 || o.x > 840) o.vx *= -1; if (o.x < 200) o.x = 200; if (o.y < 96 || o.y > 186) o.vy *= -1; if (o.y < 96) o.y = 96; o.vx += rnd(-6, 6) * dt; o.vy += rnd(-6, 6) * dt; o.vx = Math.max(-18, Math.min(18, o.vx)); o.vy = Math.max(-10, Math.min(10, o.vy)); };
         for (const b of this.bps) {
           b.rot += dt * .5;
           if (!this.on) continue;
+          if (b.m) {
+            // bound under one motor head, on the face the head would use to bind the microtubule
+            const [hx, hy] = this.headPos(b.m, b.h); b.x = hx; b.y = hy + 5;
+            b.hold -= dt;
+            if (b.hold <= 0) { const m = b.m; m.bp[b.h] = null; b.m = null; b.cool = 1.5; b.vy = 8; b.y += 6; if (!m.bp[0] && !m.bp[1]) { m.st = 'sol'; m.land = rnd(1, 3); } }
+            continue;
+          }
           drift(b); b.cool -= dt;
-          if (b.m) { b.hold -= dt; b.m.x = b.x + 4; b.m.y = b.y + 18; if (b.hold <= 0) { b.m.st = 'sol'; b.m.land = rnd(1, 3); b.m = null; b.cool = 1.2; } }
-          else if (b.cool <= 0) {
-            const m = this.motors.find(m => m.st === 'sol' && Math.hypot(m.x - b.x, m.y - b.y) < 70);
-            if (m) { m.st = 'held'; b.m = m; b.hold = rnd(8, 13); }
+          if (b.cool <= 0) {
+            // grab a free head of a motor that is not on the microtubule
+            for (const m of this.motors) {
+              if (m.st !== 'sol' && m.st !== 'held') continue;
+              const free = [0, 1].filter(h => !m.bp[h]); if (!free.length) continue;
+              const h = free[Math.floor(Math.random() * free.length)], [hx, hy] = this.headPos(m, h);
+              if (Math.hypot(hx - b.x, hy - b.y) < 60 && (m.st === 'sol' || Math.random() < dt * .4)) { m.bp[h] = b; m.st = 'held'; b.m = m; b.h = h; b.hold = rnd(8, 13); break; }
+            }
           }
         }
         for (const m of this.motors) {
           m.ph += dt;
-          if (m.st === 'sol') { drift(m); m.land -= dt; if (m.land <= 0) { m.st = 'land'; m.tx = Math.max(70, Math.min(700, m.x)); } }
+          if (m.st === 'held') drift(m, .6);
+          else if (m.st === 'sol') { drift(m); m.land -= dt; if (m.land <= 0) { m.st = 'land'; m.tx = Math.max(70, Math.min(700, m.x)); } }
           else if (m.st === 'land') { m.x += (m.tx - m.x) * Math.min(1, dt * 2); m.y += 70 * dt; if (m.y >= MY - 30) { m.y = MY - 30; m.st = 'walk'; } }
           else if (m.st === 'walk') {
             m.x += 34 * dt;
             if (m.x > MX1 - 14 || Math.random() < dt * .07) { m.st = 'up'; }
-          } else if (m.st === 'up') { m.y -= 50 * dt; m.x += 6 * dt; if (m.y < 150) { m.st = 'sol'; m.vy = -6; m.land = rnd(1, 3); if (m.x > 820) m.x = rnd(100, 500); } }
+          } else if (m.st === 'up') { m.y -= 50 * dt; m.x += 6 * dt; if (m.y < 160) { m.st = 'sol'; m.vy = -6; m.land = rnd(1, 3); if (m.x > 820) m.x = rnd(100, 500); } }
         }
       },
       drawMotor(m) {
@@ -1403,7 +1417,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
         const walking = m.st === 'walk';
         const s = walking ? (m.ph * 4) % 1 : 0;
         const hy = m.y + 21;
-        let ax = m.x - 7, bx = m.x + 7, ay = hy, by = hy;
+        const sp = m.st === 'held' ? 12 : 7; let ax = m.x - sp, bx = m.x + sp, ay = hy, by = hy;
         if (walking) { const lift = Math.sin(s * Math.PI) * 8; if (Math.floor(m.ph * 4) % 2) { ax += s * 14 - 7; ay -= lift; } else { bx += s * 14 - 7; by -= lift; } }
         ctx.strokeStyle = col; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
         ctx.beginPath(); ctx.moveTo(ax, ay - 4); ctx.lineTo(m.x, m.y + 6); ctx.lineTo(bx, by - 4); ctx.stroke();
@@ -1411,28 +1425,26 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
         for (let i = 1; i <= 5; i++) ctx.lineTo(m.x + (i % 2 ? 2 : -2), m.y + 6 - i * 5); ctx.stroke();
         heads(ax, ay, col, 7.5); heads(bx, by, col, 7.5);
       },
+      // KIFBP: a cupped molecule; when bound it cradles the underside (microtubule-binding face) of one head
+      drawBP(b) {
+        ctx.save(); ctx.translate(b.x, b.y); if (!b.m) ctx.rotate(Math.sin(b.rot) * .7);
+        ctx.fillStyle = 'rgba(185,166,255,.30)'; ctx.strokeStyle = C.bp; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.ellipse(0, 0, 10.5, 9.5, 0, -.15, Math.PI + .15); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.restore();
+      },
       draw() {
         // microtubule
         for (let r = 2; r >= 0; r--) { const y = MY + (r - 1) * 9; ctx.globalAlpha = r === 1 ? 1 : .8; for (let x = MX0 + r * 5; x < MX1; x += 20) { ctx.fillStyle = C.a; ctx.fillRect(x + 1, y - 4, 8.5, 8); ctx.fillStyle = C.b; ctx.fillRect(x + 10.5, y - 4, 8.5, 8); } }
         ctx.globalAlpha = 1;
         ctx.font = '600 17px "IBM Plex Mono", ui-monospace, monospace'; ctx.fillStyle = C.mut;
         ctx.textAlign = 'left'; ctx.fillText('− end', MX0, MY + 44); ctx.textAlign = 'right'; ctx.fillText('+ end', MX1, MY + 44);
-        for (const m of this.motors) if (m.st !== 'held') this.drawMotor(m);
-        // KIFBP: a curved clamp that wraps the motor heads
-        if (this.on) for (const b of this.bps) {
-          if (b.m) this.drawMotor(b.m);
-          ctx.save(); ctx.translate(b.x, b.y + (b.m ? 0 : 0)); ctx.rotate(b.m ? 0 : Math.sin(b.rot) * .6);
-          ctx.fillStyle = 'rgba(185,166,255,.22)'; ctx.strokeStyle = C.bp; ctx.lineWidth = 2.5;
-          const ry = b.m ? 41 : 24;
-          ctx.beginPath(); ctx.ellipse(4, b.m ? 30 : 10, b.m ? 24 : 20, b.m ? 19 : 14, 0, Math.PI * .15, Math.PI * .85, true); ctx.closePath(); ctx.fill(); ctx.stroke();
-          void ry;
-          ctx.restore();
-        }
+        for (const m of this.motors) this.drawMotor(m);
+        if (this.on) for (const b of this.bps) this.drawBP(b);
         const onMT = this.motors.filter(m => m.st === 'walk' || m.st === 'land').length;
         legend([[C.pink, 'KIF18A'], [C.k15, 'KIF15'], [C.bp, 'KIFBP'], [C.a, 'microtubule']]);
         ctx.font = '500 16px "IBM Plex Mono", ui-monospace, monospace'; ctx.textAlign = 'center'; ctx.fillStyle = C.mut;
         ctx.fillText('motors on the microtubule: ' + onMT, W / 2, MY + 44);
-        if (this.on) status('KIFBP grabs motor heads and holds them off the microtubule', C.bp);
+        if (this.on) status('KIFBP binds the microtubule-binding face of motor heads', C.bp);
         else status('Without KIFBP, too many motors bind the microtubule', C.pink);
       }
     };
