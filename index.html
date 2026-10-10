@@ -375,6 +375,15 @@ section.block { padding-block: 72px; border-top: 1px solid var(--line); }
 .more-news { margin-top: 20px; font-family: var(--display); font-weight: 600; font-size: 15px; }
 .news .d { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 3px; }
 .contact { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.foot-logos, .aff-logos { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.foot-logos a, .aff-logos a { display: block; }
+.foot-logos img, .aff-logos img { display: block; width: auto; }
+.lg-uvm { height: 36px; }
+.lg-cc { height: 48px; }
+.foot-logos { margin-top: 18px; background: #fff; border-radius: 8px; padding: 6px 10px; }
+.aff-logos { margin-bottom: 14px; border-radius: 12px; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .aff-logos { background: #fff; padding: 6px 10px; border-radius: 8px; } }
+:root[data-theme="dark"] .aff-logos { background: #fff; padding: 6px 10px; border-radius: 8px; }
 .contact h3 { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
 .copy { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .copy code { font-family: var(--mono); font-size: 15px; user-select: all; }
@@ -982,7 +991,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
   <div class="wrap contact">
     <div><h3>Email</h3><span class="copy"><code id="email">jstumpff@uvm.edu</code><button type="button" id="copy-btn">Copy</button></span><p class="profiles"><a href="media/stumpff-cv.pdf">CV</a><a href="https://orcid.org/0000-0003-0392-1254">ORCID</a><a href="https://www.linkedin.com/in/jason-stumpff-59415545/">LinkedIn</a></p></div>
     <div><h3>Lab</h3><p>Health Science Research Facility<br>Room 105<br>149 Beaumont Avenue<br>Burlington, VT 05405</p></div>
-    <div><h3>Affiliations</h3><p><a href="https://www.uvm.edu/larnermed/mpb">Molecular Physiology &amp; Biophysics</a><br><a href="https://www.uvm.edu/larnermed/uvmcancercenter">UVM Cancer Center</a><br><a href="https://www.uvm.edu/cmb">CMB Graduate Program</a></p></div>
+    <div><h3>Affiliations</h3><div class="aff-logos"><a href="https://www.uvm.edu"><img class="lg-uvm" src="media/uvm-logo-green.svg" alt="University of Vermont" width="348" height="111" loading="lazy"></a><a href="https://www.uvm.edu/larnermed/uvmcancercenter"><img class="lg-cc" src="media/uvm-cancer-center-logo.webp" alt="University of Vermont Cancer Center" width="372" height="180" loading="lazy"></a></div><p><a href="https://www.uvm.edu/larnermed/mpb">Molecular Physiology &amp; Biophysics</a><br><a href="https://www.uvm.edu/larnermed/uvmcancercenter">UVM Cancer Center</a><br><a href="https://www.uvm.edu/cmb">CMB Graduate Program</a></p></div>
   </div>
 </section>
 
@@ -997,6 +1006,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
     <div class="foot-brand">
       <p class="foot-name">Stumpff Lab</p>
       <p>Molecular motors in health and disease. Department of Molecular Physiology &amp; Biophysics, University of Vermont Larner College of Medicine.</p>
+      <div class="foot-logos"><a href="https://www.uvm.edu"><img class="lg-uvm" src="media/uvm-logo-green.svg" alt="University of Vermont" width="348" height="111" loading="lazy"></a><a href="https://www.uvm.edu/larnermed/uvmcancercenter"><img class="lg-cc" src="media/uvm-cancer-center-logo.webp" alt="University of Vermont Cancer Center" width="372" height="180" loading="lazy"></a></div>
       <a class="to-top" href="#top">Back to top <span aria-hidden="true">↑</span></a>
     </div>
     <nav aria-label="Site sections">
