@@ -167,10 +167,13 @@ img, video { max-width: 100%; height: auto; display: block; }
 
 /* hero */
 .hero { padding-block: 56px 64px; }
-.hero .wrap { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; }
+.hero .wrap { display: grid; gap: 40px; }
+.hero-intro { max-width: 52em; }
 .hero h1 { font-size: clamp(34px, 4.8vw, 52px); font-weight: 800; margin-block: 14px 20px; }
 .hero h1 em { font-style: normal; color: var(--accent); }
-.hero .lede { font-size: 19px; color: var(--muted); max-width: 34em; }
+.hero .lede { font-size: 19px; color: var(--muted); max-width: 46em; }
+.hero .lede + .lede { margin-top: 12px; }
+.hero .lede strong { color: var(--ink); font-weight: 600; }
 .hero .areas { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
 .hero .areas a { font-family: var(--display); font-weight: 600; font-size: 14px; padding: 6px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); text-decoration: none; }
 .hero .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
@@ -180,7 +183,7 @@ img, video { max-width: 100%; height: auto; display: block; }
 .btn.primary { background: var(--accent); color: var(--bg); }
 .btn.ghost { color: var(--accent); }
 .hero figure { margin: 0; min-width: 0; }
-.hero-media { display: grid; gap: 22px; min-width: 0; }
+.hero-media { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 28px; align-items: start; min-width: 0; }
 .motor-frame { position: relative; border-radius: 14px; overflow: hidden; background: #071012; }
 .motor-frame canvas { display: block; width: 100%; height: auto; aspect-ratio: 900 / 340; }
 .motor-toggle { position: absolute; right: 10px; top: 10px; font-family: var(--display); font-weight: 600; font-size: 12.5px; color: #e8eeea; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.25); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
@@ -203,8 +206,8 @@ img, video { max-width: 100%; height: auto; display: block; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 [id^="mov-"], #cin-anim, #projects, #approach, #motors, #alumni { scroll-margin-top: 90px; }
 [id^="mov-"]:target { outline: 3px solid var(--accent); outline-offset: 6px; border-radius: 6px; }
-.hero-spindle { display: grid; grid-template-columns: minmax(0, 52%) 1fr; gap: 18px; align-items: end; }
-.hero-spindle figcaption { margin-top: 0; }
+.spindle-frame { aspect-ratio: 1.7; border-radius: 14px; overflow: hidden; background: #000700; display: flex; align-items: center; justify-content: center; }
+.hero .spindle-frame img { width: auto; height: 100%; border-radius: 0; }
 
 .hero figure img { width: 100%; height: auto; border-radius: 14px; background: var(--field); }
 .hero figcaption { font-size: 14px; color: var(--muted); margin-top: 10px; }
@@ -245,7 +248,7 @@ section.block { padding-block: 72px; border-top: 1px solid var(--line); }
 .scale span { font-size: 14.5px; color: var(--muted); }
 
 /* CIN feature */
-.cin { background: var(--field); color: #e8eeea; padding-block: 80px; }
+.cin { background: var(--band); color: #e8eeea; padding-block: 80px; }
 .cin .eyebrow { color: #e0b44a; }
 .cin h2 { font-size: clamp(30px, 4vw, 44px); font-weight: 800; margin-block: 10px 16px; max-width: 20em; }
 .cin .lede { color: #b9c6c0; max-width: 42em; font-size: 18px; }
@@ -388,6 +391,8 @@ section.block { padding-block: 72px; border-top: 1px solid var(--line); }
 .artist-note h4 { font-size: 19px; margin-bottom: 6px; }
 .artist-note p { color: var(--muted); }
 .role-link { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.partner-cta { margin-top: 14px; color: #c3d3ca; font-size: 15.5px; }
+.partner-cta a { color: var(--band-gold); }
 .contact h3 { font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
 .copy { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .copy code { font-family: var(--mono); font-size: 15px; user-select: all; }
@@ -403,8 +408,6 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
 .way .verb { font-family: var(--mono); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); padding-inline: 4px; }
 .way h4 { font-size: 18px; padding-inline: 4px; }
 .way p { font-size: 15px; color: var(--muted); padding-inline: 4px; }
-.mini-walk { animation: miniwalk 6s linear infinite; }
-@keyframes miniwalk { from { transform: translateX(-60px); } to { transform: translateX(110px); } }
 /* footer */
 .site-foot { background: var(--band); color: var(--band-ink); padding: 0 0 26px; border-top: 0; font-size: 15px; }
 .mt-strip { position: relative; height: 46px; overflow: hidden; background: linear-gradient(var(--band), var(--band)) ; }
@@ -419,9 +422,8 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
 .foot-brand .foot-name { font-family: var(--display); font-weight: 800; font-size: 22px; color: var(--band-ink); margin-bottom: 6px; }
 .foot-brand .to-top { display: inline-block; margin-top: 14px; font-family: var(--display); font-weight: 600; color: var(--band-gold); }
 .foot-base { margin-top: 30px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.14); color: var(--band-muted); font-size: 13.5px; }
-@media (max-width: 900px) { .ways { grid-template-columns: 1fr 1fr; } .foot-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 900px) { .hero-media { grid-template-columns: 1fr; } .spindle-frame { aspect-ratio: 1.35; } .ways { grid-template-columns: 1fr 1fr; } .foot-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .foot-grid { grid-template-columns: 1fr 1fr; gap: 26px 20px; } .foot-brand, .foot-grid nav[aria-label="University of Vermont"] { grid-column: 1 / -1; } }
-@media (prefers-reduced-motion: reduce) { .mini-walk { animation: none !important; } }
 
 
 @media (max-width: 960px) {
@@ -440,7 +442,6 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
 /* phones: compact nav, two-up people and art */
 @media (max-width: 640px) {
   .kin-ctrls { position: static; justify-content: flex-end; padding: 0 8px 8px; }
-  .hero-spindle { grid-template-columns: minmax(0, 46%) 1fr; }
   .nav .wrap { flex-wrap: nowrap; flex-direction: column; align-items: stretch; gap: 6px; padding-block: 10px 8px; }
   .brand small { display: none; }
   .nav ul { flex-wrap: nowrap; overflow-x: auto; gap: 18px; padding-bottom: 4px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
@@ -484,11 +485,11 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
 
 <header class="hero" id="top">
   <div class="wrap">
-    <div>
+    <div class="hero-intro">
       <p class="eyebrow"><a class="eyebrow-link" href="https://www.uvm.edu/larnermed/mpb">Molecular Physiology &amp; Biophysics</a> · UVM<br><a class="eyebrow-link" href="https://www.uvm.edu/larnermed/uvmcancercenter">UVM Cancer Center</a></p>
       <h1>Molecular motors in <em>health and disease</em></h1>
-      <p class="tagline"><span>Watch.</span> <span>Measure.</span> <span>Perturb.</span> <span>Understand.</span></p>
-      <p class="lede">Molecular motors are tiny protein machines that turn chemical energy into movement, walking along tracks inside the cell to carry cargo and to push and pull on chromosomes during cell division. We study the biology of kinesin motors: how cells switch them on and off and tune their activities for specific jobs, and how defects in that control contribute to cancer, bone disease, neurodevelopmental disorders, and infertility.</p>
+      <p class="lede"><strong>Welcome to the Stumpff Lab.</strong> We study molecular motors, tiny protein machines that turn chemical energy into movement, walking along tracks inside the cell to carry cargo and to push and pull on chromosomes during cell division.</p>
+      <p class="lede">We are most interested in a type of motor called a kinesin. Our goal is to learn how cells switch kinesins on and off and tune their activities for specific jobs. We also want to know how defects in that control contribute to cancer, bone disease, neurodevelopmental disorders, and infertility.</p>
       <div class="areas" aria-label="Research areas">
         <a href="#p-cancer">Cancer</a><a href="#p-bone">Bone dysplasia</a><a href="#p-neuro">Neurodevelopment</a><a href="#p-fertility">Infertility</a>
       </div>
@@ -508,19 +509,107 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
       <figcaption>Kinesins are motor proteins that walk along microtubules, one 8-nanometer step at a time, powered by ATP. Some carry cargo through the cell. Others, like KIF18A, collect at microtubule ends and stop them from growing or shrinking. (Animation; not to scale.)</figcaption>
     </figure>
     <figure class="hero-spindle">
-      <img src="media/hero-spindle.jpg" alt="Fluorescence image of a human mitotic spindle: green microtubules fan out from two poles around blue chromosomes aligned at the center" width="1400" height="1400">
-      <figcaption>A mitotic spindle in a human cell during metaphase. Microtubules (green) align the chromosomes (blue) at the spindle equator before they are pulled apart. Kinesins play important roles in spindle formation and function.</figcaption>
+      <div class="spindle-frame"><img src="media/hero-spindle.jpg" alt="Fluorescence image of a human mitotic spindle: green microtubules fan out from two poles around blue chromosomes aligned at the center" width="1400" height="1400"></div>
+      <figcaption>Kinesins also contribute to the assembly, organization, and function of the mitotic spindle, the machine that separates chromosomes during cell division. Shown here: a human cell in metaphase. Microtubules (green) align the chromosomes (blue) at the spindle equator before they are pulled apart.</figcaption>
     </figure>
     </div>
   </div>
 </header>
+
+<section class="block approach-sec" id="approach">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">How we work</p>
+      <h2>Watch. Measure. Perturb. Understand.</h2>
+      <p>Four verbs, one goal: understand how kinesins do their jobs, and what goes wrong in disease.</p>
+    </div>
+      <div class="ways">
+        <article class="way">
+          <svg viewBox="0 0 240 140" role="img" aria-label="Drawing of a dividing cell seen through a camera viewfinder">
+            <rect width="240" height="140" fill="#071012"/>
+            <g stroke="#e8eeea" stroke-width="2" fill="none" opacity=".6"><path d="M18 34V18h16M222 34V18h-16M18 106v16h16M222 106v16h-16"/></g>
+            <circle cx="32" cy="30" r="0" fill="#ff5d5d"/>
+            <circle cx="206" cy="28" r="4" fill="#ff5d5d"><animate attributeName="opacity" values="1;.2;1" dur="1.6s" repeatCount="indefinite"/></circle>
+            <ellipse cx="120" cy="72" rx="62" ry="42" fill="rgba(255,122,182,.08)" stroke="#ff7ab6" stroke-width="2"/>
+            <g stroke="#7fe0a3" stroke-width="1.6" opacity=".85">
+              <path d="M76 72L104 50M76 72L104 62M76 72L104 72M76 72L104 82M76 72L104 94M164 72L136 50M164 72L136 62M164 72L136 72M164 72L136 82M164 72L136 94"/>
+            </g>
+            <g stroke="#6aa9ff" stroke-width="6" stroke-linecap="round"><path d="M104 50v44M136 50v44"/></g>
+            <circle cx="76" cy="72" r="5" fill="#e8eeea"/><circle cx="164" cy="72" r="5" fill="#e8eeea"/>
+          </svg>
+          <span class="verb">Watch</span>
+          <h4>Live-cell imaging</h4>
+          <p>We film living cells as they divide or differentiate to understand single-cell phenotypes in detail.</p>
+        </article>
+        <article class="way">
+          <svg viewBox="0 0 240 140" role="img" aria-label="Drawing of a single kinesin on a microtubule above a kymograph used to measure its movement">
+            <rect width="240" height="140" fill="#071012"/>
+            <g>
+              <rect x="20" y="44" width="200" height="9" fill="#3fae74"/>
+              <path d="M20 44h200" stroke="#7fe0a3" stroke-width="9" stroke-dasharray="9 3"/>
+            </g>
+            <g id="measure-walker">
+              <path class="mw-neck" d="" stroke="#ff7ab6" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <path class="mw-stalk" d="M0 0l2-3.5-4-3.5 4-3.5-4-3.5 2-2" stroke="#ff7ab6" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+              <ellipse class="mw-a" cx="26" cy="38" rx="6.5" ry="5" fill="#ff7ab6"/><ellipse class="mw-b" cx="38" cy="38" rx="6.5" ry="5" fill="#ff7ab6"/>
+            </g>
+            <rect x="20" y="66" width="200" height="60" fill="none" stroke="#93a39b" stroke-width="1" opacity=".5"/>
+            <g stroke="#ff7ab6" stroke-width="2.4" stroke-linecap="round" opacity=".9"><path d="M30 70L120 122M70 70L150 116M128 72L210 118"/></g>
+            <text x="24" y="135" fill="#93a39b" font-size="9" font-family="IBM Plex Mono, monospace">distance →</text>
+          </svg>
+          <span class="verb">Measure</span>
+          <h4>Quantitative image analysis</h4>
+          <p>We evaluate motor activities both in cells and in isolation, measuring single-molecule activity, microtubule dynamics, chromosome movements, and cargo transport.</p>
+        </article>
+        <article class="way">
+          <svg viewBox="0 0 240 140" role="img" aria-label="Drawing of a DNA double helix with one highlighted mutation, and a small-molecule inhibitor structure">
+            <rect width="240" height="140" fill="#071012"/>
+            <g transform="translate(-6 0) scale(.82 1)">
+            <g fill="none" stroke-width="3" stroke-linecap="round">
+              <path d="M20 70C40 30 60 30 80 70S120 110 140 70 180 30 200 70" stroke="#f1c75b"/>
+              <path d="M20 70C40 110 60 110 80 70S120 30 140 70 180 110 200 70" stroke="#6aa9ff"/>
+            </g>
+            <g stroke="#93a39b" stroke-width="2" opacity=".7"><path d="M34 49v42M50 40v60M64 45v50M96 45v50M110 40v60M124 49v42M156 49v42M170 40v60M184 45v50"/></g>
+            <path d="M96 45v50" stroke="#ff5d5d" stroke-width="3.5"/>
+            <circle cx="96" cy="70" r="12" fill="none" stroke="#ff5d5d" stroke-width="1.5" stroke-dasharray="3 3"/></g>
+            <g transform="translate(196 76) scale(.9) translate(-186 -106)"><g aria-hidden="true" fill="none" stroke="#b9a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M186.0 93.0 L197.3 99.5 L197.3 112.5 L186.0 119.0 L174.7 112.5 L174.7 99.5 Z"/><path d="M186.0 96.6 L194.1 101.3 M194.1 110.7 L186.0 115.4 M177.9 110.7 L177.9 101.3 M197.3 99.5 L208.3 93.0 M217.3 93.0 L227.3 87.0 M227.3 87.0 L227.3 76.0 M229.8 87.0 L229.8 77.0 M186.0 119.0 L175.0 125.5"/></g><g font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#b9a6ff" text-anchor="middle"><text x="212.8" y="96.5">N</text><text x="228.8" y="74.0">O</text><text x="170.0" y="129.0">F</text></g></g>
+          </svg>
+          <span class="verb">Perturb</span>
+          <h4>Variants, switches, and drugs</h4>
+          <p>We engineer patient mutations and modification "switches" into cells, and treat them with inhibitors, to test cause and effect.</p>
+        </article>
+        <article class="way">
+          <svg viewBox="0 0 240 140" role="img" aria-label="Drawing of a kinesin connected to four disease contexts: tumors, bone, neurons, and germ cells">
+            <rect width="240" height="140" fill="#071012"/>
+            <g stroke="#93a39b" stroke-width="1.4" stroke-dasharray="3 4" opacity=".8"><path d="M120 70L48 34M120 70L192 34M120 70L48 108M120 70L192 108"/></g>
+            <g>
+              <path d="M112 78l8-12 8 12" stroke="#ff7ab6" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+              <path d="M120 66l2-4-4-4 4-4-2-4" stroke="#ff7ab6" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+              <ellipse cx="112" cy="80" rx="7" ry="5.5" fill="#ff7ab6"/><ellipse cx="128" cy="80" rx="7" ry="5.5" fill="#ff7ab6"/>
+            </g>
+            <g font-family="Schibsted Grotesk, system-ui, sans-serif" font-size="11" font-weight="600" fill="#e8eeea" text-anchor="middle">
+              <circle cx="40" cy="30" r="13" fill="#ff7ab6" opacity=".9"/><text x="40" y="56">tumors</text>
+              <circle cx="200" cy="30" r="13" fill="#ffa04d" opacity=".9"/><text x="200" y="56">bone</text>
+              <circle cx="40" cy="104" r="13" fill="#b9a6ff" opacity=".9"/><text x="40" y="131">neurons</text>
+              <circle cx="200" cy="104" r="13" fill="#f1c75b" opacity=".9"/><text x="200" y="131">germ cells</text>
+            </g>
+          </svg>
+          <span class="verb">Understand</span>
+          <h4>From mechanism to disease</h4>
+          <p>We connect motor activity to human disease, including cancer, bone dysplasia, neurodevelopmental disorders, and infertility.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <section class="block" id="research">
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow">Research</p>
       <h2>How are kinesins regulated for cell- and tissue-specific functions?</h2>
-      <p>The human genome encodes 45 kinesins. They share a conserved motor domain but exhibit a wide range of activities and functions. Importantly, when their regulation fails it can initiate human disease states. We study kinesins across different disease contexts, connected by a shared set of mechanistic questions.</p>
+      <p>This is the central question in our lab. The human genome encodes 45 kinesins. They share a conserved motor domain but exhibit a wide range of activities and functions. Why it matters: when kinesin regulation fails, it can initiate human disease, and a defect in a motor found in every cell often damages only one tissue. We study kinesins across different disease contexts, connected by a shared set of mechanistic questions.</p>
     </div>
 
     <div class="subsection">
@@ -619,88 +708,6 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
       </div>
     </div>
 
-    <div class="subsection" id="approach">
-      <div class="subhead">
-        <h3>How we work</h3>
-        <p>Four verbs, one goal: understand how kinesins do their jobs, and what goes wrong in disease.</p>
-      </div>
-      <div class="ways">
-        <article class="way">
-          <svg viewBox="0 0 240 140" role="img" aria-label="Drawing of a dividing cell seen through a camera viewfinder">
-            <rect width="240" height="140" fill="#071012"/>
-            <g stroke="#e8eeea" stroke-width="2" fill="none" opacity=".6"><path d="M18 34V18h16M222 34V18h-16M18 106v16h16M222 106v16h-16"/></g>
-            <circle cx="32" cy="30" r="0" fill="#ff5d5d"/>
-            <circle cx="206" cy="28" r="4" fill="#ff5d5d"><animate attributeName="opacity" values="1;.2;1" dur="1.6s" repeatCount="indefinite"/></circle>
-            <ellipse cx="120" cy="72" rx="62" ry="42" fill="rgba(255,122,182,.08)" stroke="#ff7ab6" stroke-width="2"/>
-            <g stroke="#7fe0a3" stroke-width="1.6" opacity=".85">
-              <path d="M76 72L104 50M76 72L104 62M76 72L104 72M76 72L104 82M76 72L104 94M164 72L136 50M164 72L136 62M164 72L136 72M164 72L136 82M164 72L136 94"/>
-            </g>
-            <g stroke="#6aa9ff" stroke-width="6" stroke-linecap="round"><path d="M104 50v44M136 50v44"/></g>
-            <circle cx="76" cy="72" r="5" fill="#e8eeea"/><circle cx="164" cy="72" r="5" fill="#e8eeea"/>
-          </svg>
-          <span class="verb">Watch</span>
-          <h4>Live-cell imaging</h4>
-          <p>We film living cells as they divide or differentiate to understand single-cell phenotypes in detail.</p>
-        </article>
-        <article class="way">
-          <svg viewBox="0 0 240 140" role="img" aria-label="Drawing of a single kinesin on a microtubule above a kymograph used to measure its movement">
-            <rect width="240" height="140" fill="#071012"/>
-            <g>
-              <rect x="20" y="44" width="200" height="9" fill="#3fae74"/>
-              <path d="M20 44h200" stroke="#7fe0a3" stroke-width="9" stroke-dasharray="9 3"/>
-            </g>
-            <g class="mini-walk">
-              <path d="M84 38l8-14 8 14" stroke="#ff7ab6" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-              <path d="M92 24l2-4-4-4 4-4-2-4" stroke="#ff7ab6" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-              <ellipse cx="84" cy="38" rx="7" ry="5.5" fill="#ff7ab6"/><ellipse cx="100" cy="38" rx="7" ry="5.5" fill="#ff7ab6"/>
-            </g>
-            <rect x="20" y="66" width="200" height="60" fill="none" stroke="#93a39b" stroke-width="1" opacity=".5"/>
-            <g stroke="#ff7ab6" stroke-width="2.4" stroke-linecap="round" opacity=".9"><path d="M30 70L120 122M70 70L150 116M128 72L210 118"/></g>
-            <text x="24" y="135" fill="#93a39b" font-size="9" font-family="IBM Plex Mono, monospace">distance →</text>
-          </svg>
-          <span class="verb">Measure</span>
-          <h4>Quantitative image analysis</h4>
-          <p>We evaluate motor activities both in cells and in isolation, measuring single-molecule activity, microtubule dynamics, chromosome movements, and cargo transport.</p>
-        </article>
-        <article class="way">
-          <svg viewBox="0 0 240 140" role="img" aria-label="Drawing of a DNA double helix with one highlighted mutation, and a small-molecule inhibitor structure">
-            <rect width="240" height="140" fill="#071012"/>
-            <g transform="translate(-6 0) scale(.82 1)">
-            <g fill="none" stroke-width="3" stroke-linecap="round">
-              <path d="M20 70C40 30 60 30 80 70S120 110 140 70 180 30 200 70" stroke="#f1c75b"/>
-              <path d="M20 70C40 110 60 110 80 70S120 30 140 70 180 110 200 70" stroke="#6aa9ff"/>
-            </g>
-            <g stroke="#93a39b" stroke-width="2" opacity=".7"><path d="M34 49v42M50 40v60M64 45v50M96 45v50M110 40v60M124 49v42M156 49v42M170 40v60M184 45v50"/></g>
-            <path d="M96 45v50" stroke="#ff5d5d" stroke-width="3.5"/>
-            <circle cx="96" cy="70" r="12" fill="none" stroke="#ff5d5d" stroke-width="1.5" stroke-dasharray="3 3"/></g>
-            <g transform="translate(196 76) scale(.9) translate(-186 -106)"><g aria-hidden="true" fill="none" stroke="#b9a6ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M186.0 93.0 L197.3 99.5 L197.3 112.5 L186.0 119.0 L174.7 112.5 L174.7 99.5 Z"/><path d="M186.0 96.6 L194.1 101.3 M194.1 110.7 L186.0 115.4 M177.9 110.7 L177.9 101.3 M197.3 99.5 L208.3 93.0 M217.3 93.0 L227.3 87.0 M227.3 87.0 L227.3 76.0 M229.8 87.0 L229.8 77.0 M186.0 119.0 L175.0 125.5"/></g><g font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#b9a6ff" text-anchor="middle"><text x="212.8" y="96.5">N</text><text x="228.8" y="74.0">O</text><text x="170.0" y="129.0">F</text></g></g>
-          </svg>
-          <span class="verb">Perturb</span>
-          <h4>Variants, switches, and drugs</h4>
-          <p>We engineer patient mutations and modification "switches" into cells, and treat them with inhibitors, to test cause and effect.</p>
-        </article>
-        <article class="way">
-          <svg viewBox="0 0 240 140" role="img" aria-label="Drawing of a kinesin connected to four disease contexts: tumors, bone, neurons, and germ cells">
-            <rect width="240" height="140" fill="#071012"/>
-            <g stroke="#93a39b" stroke-width="1.4" stroke-dasharray="3 4" opacity=".8"><path d="M120 70L48 34M120 70L192 34M120 70L48 108M120 70L192 108"/></g>
-            <g>
-              <path d="M112 78l8-12 8 12" stroke="#ff7ab6" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-              <path d="M120 66l2-4-4-4 4-4-2-4" stroke="#ff7ab6" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-              <ellipse cx="112" cy="80" rx="7" ry="5.5" fill="#ff7ab6"/><ellipse cx="128" cy="80" rx="7" ry="5.5" fill="#ff7ab6"/>
-            </g>
-            <g font-family="Schibsted Grotesk, system-ui, sans-serif" font-size="11" font-weight="600" fill="#e8eeea" text-anchor="middle">
-              <circle cx="40" cy="30" r="13" fill="#ff7ab6" opacity=".9"/><text x="40" y="56">tumors</text>
-              <circle cx="200" cy="30" r="13" fill="#ffa04d" opacity=".9"/><text x="200" y="56">bone</text>
-              <circle cx="40" cy="104" r="13" fill="#b9a6ff" opacity=".9"/><text x="40" y="131">neurons</text>
-              <circle cx="200" cy="104" r="13" fill="#f1c75b" opacity=".9"/><text x="200" y="131">germ cells</text>
-            </g>
-          </svg>
-          <span class="verb">Understand</span>
-          <h4>From mechanism to disease</h4>
-          <p>We connect motor activity to human disease, including cancer, bone dysplasia, neurodevelopmental disorders, and infertility.</p>
-        </article>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -732,6 +739,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
       </div>
     </div>
     <div class="partners"><strong>Industry partners</strong><span>Apeiron Therapeutics</span><span>Volastra Therapeutics</span></div>
+    <p class="partner-cta">Interested in partnering on KIF18A, chromosome instability, or mitotic drug mechanisms? Contact Jason at <a href="mailto:jstumpff@uvm.edu">jstumpff@uvm.edu</a>.</p>
   </div>
 </section>
 
@@ -739,14 +747,14 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow">People</p>
-      <h2>Who's in the lab?</h2>
+      <h2>Our Team</h2>
     </div>
     <figure class="labphoto">
       <img loading="lazy" src="media/lab-photo.jpg" alt="Stumpff lab members standing together in a backyard garden in summer" width="1800" height="1351">
       <figcaption>The Stumpff lab.</figcaption>
     </figure>
     <div class="people">
-      <div class="person"><img loading="lazy" class="avatar" src="media/jason-stumpff-sq.jpg" alt="Jason Stumpff" width="500" height="500"><h3>Jason Stumpff, PhD</h3><span class="role">Principal Investigator</span><p>Professor, Molecular Physiology &amp; Biophysics. Co-leads the UVM Cancer Center's Cancer &amp; Host Interactions Program.</p><p class="profiles"><a href="media/stumpff-cv.pdf">CV</a><a href="https://orcid.org/0000-0003-0392-1254">ORCID</a><a href="https://www.linkedin.com/in/jason-stumpff-59415545/">LinkedIn</a></p></div>
+      <div class="person"><img loading="lazy" class="avatar" src="media/jason-stumpff-sq.jpg" alt="Jason Stumpff" width="500" height="500"><h3>Jason Stumpff, PhD</h3><span class="role">Principal Investigator</span><p>Professor, Molecular Physiology &amp; Biophysics. Co-leads the UVM Cancer Center's <a href="https://www.uvm.edu/larnermed/uvmcancercenter/cancer-and-host-interactions">Cancer &amp; Host Interactions Program</a>.</p><p class="profiles"><a href="media/stumpff-cv.pdf">CV</a><a href="https://orcid.org/0000-0003-0392-1254">ORCID</a><a href="https://www.linkedin.com/in/jason-stumpff-59415545/">LinkedIn</a></p></div>
       <div class="person"><img loading="lazy" class="avatar" src="media/lindsey-alpeter-sq.jpg" alt="Lindsey Alpeter" width="375" height="375"><h3>Lindsey Alpeter, MD</h3><span class="role">REI Fellow, Ob/Gyn</span><p>Kinesin variants linked to infertility.</p></div>
       <div class="person"><img loading="lazy" class="avatar" src="media/sarah-catherine-paschall-sq.jpg" alt="Sarah-Catherine Paschall" width="250" height="250"><h3>Sarah-Catherine Paschall</h3><span class="role">PhD Student, CMB</span><p>How KIFBP controls kinesins during neuronal development.</p><p class="profiles"><a href="https://www.linkedin.com/in/sarah-catherine-paschall">LinkedIn</a></p></div>
       <div class="person"><img loading="lazy" class="avatar" src="media/amila-semic-sq.jpg" alt="Amila Šemić" width="250" height="250"><h3>Amila Šemić</h3><span class="role">PhD Student, CMB</span><p>How KIF22 mutations cause SEMDJL2.</p><p class="profiles"><a href="https://www.linkedin.com/in/amila-%C5%A1emi%C4%87-29863b160/">LinkedIn</a></p></div>
@@ -760,7 +768,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
     </div>
 
     <div class="alumni" id="alumni">
-      <h3>Where our alumni went</h3>
+      <h3>Where our alumni are now</h3>
       <p>Lab alumni have gone on to faculty positions, postdocs, PhD and medical programs, clinical practice, biotech, and industry.</p>
       <div class="alum-table">
         <table>
@@ -897,7 +905,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
       <p>Cell art and time-lapse movies from the lab, from single motors to differentiating cells.</p>
     </div>
     <div class="subsection" id="art">
-      <div class="subhead"><h3>Cell Art</h3><p>Images made by lab members, many created as journal cover submissions. Select an image to view it full size.</p></div>
+      <div class="subhead"><h3>Cell Art</h3><p>Our science is built on microscopy. Trainees learn high-resolution and live-cell imaging, and many of these images began as experimental data before becoming journal cover submissions. Select an image to view it full size.</p></div>
       <div class="art-rows">
       <div class="art">
         <figure style="flex: 1.652 1 0"><button type="button" class="art-open" data-full="media/art-kymograph-stumpff-2012.jpg" data-caption="Spindle kymograph. EB3-labeled microtubule tips and CENP-B-labeled kinetochores in a metaphase spindle. Jason Stumpff, 2012." aria-label="View spindle kymograph full size"><img src="media/art-kymograph-stumpff-2012-thumb.jpg" alt="Kymograph of a metaphase spindle: cyan microtubule tracks on either side of a braided pink and yellow band of kinetochore paths" width="900" height="545" loading="lazy"></button><figcaption><b>Spindle kymograph.</b> EB3-labeled microtubule tips and CENP-B-labeled kinetochores in a metaphase spindle. <span class="credit">Jason Stumpff, 2012</span></figcaption></figure>
@@ -970,10 +978,10 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
     <p class="eyebrow">Join us</p>
     <h2>Interested in joining our team?</h2>
     <div class="paths">
-      <div class="path"><h3>Prospective PhD students</h3><p>Apply through the <a href="https://www.uvm.edu/graduate/cmb">Cellular, Molecular &amp; Biomedical Sciences</a> program, then reach out about a rotation.</p></div>
-      <div class="path"><h3>Current UVM grad students</h3><p>Email Jason to talk about rotation projects in any of the four research areas.</p></div>
-      <div class="path"><h3>Postdocs</h3><p>Send a CV, a short statement of interests, and names of three references.</p></div>
-      <div class="path"><h3>Undergraduates</h3><p>We host undergraduates for multi-year research and honors thesis projects. Email with your schedule and interests.</p></div>
+      <div class="path"><h3>Prospective PhD students</h3><p>Apply through the <a href="https://www.uvm.edu/graduate/cmb">Cellular, Molecular &amp; Biomedical Sciences</a> program, then reach out about a rotation at <a href="mailto:jstumpff@uvm.edu">jstumpff@uvm.edu</a>.</p></div>
+      <div class="path"><h3>Current UVM grad students</h3><p>Email Jason at <a href="mailto:jstumpff@uvm.edu">jstumpff@uvm.edu</a> to talk about rotation projects in any of the four research areas.</p></div>
+      <div class="path"><h3>Postdocs</h3><p>Send a CV, a short statement of interests, and names of three references to <a href="mailto:jstumpff@uvm.edu">jstumpff@uvm.edu</a>.</p></div>
+      <div class="path"><h3>Undergraduates</h3><p>We host undergraduates for multi-year research and honors thesis projects. Email <a href="mailto:jstumpff@uvm.edu">jstumpff@uvm.edu</a> with your schedule and interests.</p></div>
     </div>
     <div class="mentoring">
       <div><h3>Training built around your goals</h3><p>Individual training plans tied to the career you want. Alumni work in academia, medicine, biotech, and science communication.</p></div>
@@ -987,6 +995,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">News</p><h2>Lately</h2></div>
     <div class="news"><ul>
+      <li><span class="d">Oct 2026</span><span>Amila wins Best Poster at the CMB Halloween Poster Session.</span></li>
       <li><span class="d">Aug 2026</span><span>The UVM Cancer Center <a href="https://www.uvm.edu/larnermed/uvmcancercenter/news/season-success-celebrating-trainee-amila-semics-publications-f31">highlights Amila's recent successes</a>: two publications and an F31 fellowship.</span></li>
       <li><span class="d">Aug 2026</span><span>Amila's paper on the phosphorylation switch that controls KIF11 force output is <a href="https://doi.org/10.1073/pnas.2602415123">out in <i>PNAS</i></a>.</span></li>
       <li><span class="d">Aug 2026</span><span>New KIF22 variants from SEMDJL2 patients characterized in human chondrocytes, <a href="https://doi.org/10.1091/mbc.e26-03-0126">published in <i>MBoC</i></a>.</span></li>
@@ -1029,7 +1038,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
     </nav>
     <nav aria-label="Connect">
       <h3>Connect</h3>
-      <a href="mailto:jstumpff@uvm.edu">Email Jason</a><a href="media/stumpff-cv.pdf">CV</a><a href="https://orcid.org/0000-0003-0392-1254">ORCID</a><a href="https://www.linkedin.com/in/jason-stumpff-59415545/">LinkedIn</a><a href="https://www.ncbi.nlm.nih.gov/myncbi/jason.stumpff.1/bibliography/public/">PubMed</a>
+      <a href="mailto:jstumpff@uvm.edu">jstumpff@uvm.edu</a><a href="media/stumpff-cv.pdf">CV</a><a href="https://orcid.org/0000-0003-0392-1254">ORCID</a><a href="https://www.linkedin.com/in/jason-stumpff-59415545/">LinkedIn</a><a href="https://www.ncbi.nlm.nih.gov/myncbi/jason.stumpff.1/bibliography/public/">PubMed</a>
     </nav>
     <nav aria-label="University of Vermont">
       <h3>UVM</h3>
@@ -1698,6 +1707,36 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
     if (reduce) { n = Math.round((svg.clientWidth || 1200) / 2 / D); draw(); return; }
     draw();
     if ('IntersectionObserver' in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) { cancelAnimationFrame(raf); last = performance.now(); raf = requestAnimationFrame(tick); } }).observe(svg);
+  })();
+
+  // ---- How-we-work "Measure" card: kinesin steps hand-over-hand along the microtubule ----
+  (function () {
+    const g = document.getElementById('measure-walker');
+    if (!g) return;
+    const D = 12, X0 = 26, HY = 38, JY = 27, N = 16;          // dimer spacing, first head x, head y, junction y, steps per pass
+    const neck = g.querySelector('.mw-neck'), stalk = g.querySelector('.mw-stalk');
+    let back = g.querySelector('.mw-a'), front = g.querySelector('.mw-b');
+    let n = 0, s = 0, dwell = .3, last = 0, raf = 0, visible = false;
+    const cx = i => X0 + i * D;
+    function draw() {
+      const rx0 = cx(n), fx = cx(n + 1);
+      const rx = rx0 + (cx(n + 2) - rx0) * s, ry = HY - Math.sin(s * Math.PI) * 9;
+      const jx = (rx + fx) / 2;
+      back.setAttribute('cx', rx.toFixed(1)); back.setAttribute('cy', ry.toFixed(1));
+      front.setAttribute('cx', fx.toFixed(1)); front.setAttribute('cy', HY);
+      neck.setAttribute('d', `M${rx.toFixed(1)} ${(ry - 3).toFixed(1)}L${jx.toFixed(1)} ${JY}L${fx.toFixed(1)} ${HY - 3}`);
+      stalk.setAttribute('transform', `translate(${jx.toFixed(1)} ${JY})`);
+    }
+    function tick(ts) {
+      const dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts;
+      if (s > 0) { s += dt / .22; if (s >= 1) { s = 0; n += 1; const t = back; back = front; front = t; dwell = .18 + Math.random() * .2; if (n >= N) { n = 0; dwell = .8; } } }
+      else { dwell -= dt; if (dwell <= 0) s = .001; }
+      draw();
+      if (visible) raf = requestAnimationFrame(tick);
+    }
+    draw();
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if ('IntersectionObserver' in window) new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) { cancelAnimationFrame(raf); last = performance.now(); raf = requestAnimationFrame(tick); } }).observe(g.ownerSVGElement);
   })();
   // ---- pause / play all movies ----
   const mt = document.getElementById('motion-toggle');
