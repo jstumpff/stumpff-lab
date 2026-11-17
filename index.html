@@ -380,6 +380,9 @@ section.block { padding-block: 72px; border-top: 1px solid var(--line); }
 /* news + contact */
 .news ul { list-style: none; margin: 0; padding: 0; }
 .news li { display: grid; grid-template-columns: 110px 1fr; gap: 20px; padding-block: 14px; border-top: 1px solid var(--line); }
+.news-photo { margin: 12px 0 4px; max-width: 420px; }
+.news-photo img { width: 100%; height: auto; border-radius: 10px; display: block; }
+.news-photo figcaption { font-size: 14px; color: var(--muted); margin-top: 6px; }
 .more-news { margin-top: 20px; font-family: var(--display); font-weight: 600; font-size: 15px; }
 .news .d { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 3px; }
 .contact { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
@@ -765,7 +768,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
       <div class="person"><img loading="lazy" class="avatar" src="media/sarah-catherine-paschall-sq.jpg" alt="Sarah-Catherine Paschall" width="250" height="250"><h3>Sarah-Catherine Paschall</h3><span class="role">PhD Student, CMB</span><p>How KIFBP controls kinesins during neuronal development.</p><p class="profiles"><a href="https://www.linkedin.com/in/sarah-catherine-paschall">LinkedIn</a></p></div>
       <div class="person"><img loading="lazy" class="avatar" src="media/amila-semic-sq.jpg" alt="Amila Šemić" width="250" height="250"><h3>Amila Šemić</h3><span class="role">PhD Student, CMB</span><p>How KIF22 mutations cause SEMDJL2.</p><p class="profiles"><a href="https://www.linkedin.com/in/amila-%C5%A1emi%C4%87-29863b160/">LinkedIn</a></p></div>
       <div class="person"><img loading="lazy" class="avatar" src="media/ethan-wagner-sq.jpg" alt="Ethan Wagner" width="250" height="250"><h3>Ethan Wagner</h3><span class="role">PhD Student, CMB</span><p>Sensitivity and resistance to KIF18A inhibitors.</p><p class="profiles"><a href="https://www.linkedin.com/in/ethan-wagner001/">LinkedIn</a></p></div>
-      <div class="person"><img loading="lazy" class="avatar placeholder" src="media/placeholder-science-sq.jpg" alt="Placeholder image until a headshot is added" width="463" height="463"><h3>Stephanie Miller</h3><span class="role">Medical Student Researcher</span><p>Kinesin variants linked to infertility.</p></div>
+      <div class="person"><img loading="lazy" class="avatar" src="media/stephanie-miller-sq.jpg" alt="Stephanie Miller" width="500" height="500"><h3>Stephanie Miller</h3><span class="role">Medical Student Researcher</span><p>Kinesin variants linked to infertility.</p></div>
       <div class="person"><img loading="lazy" class="avatar" src="media/lily-kearns-sq.jpg" alt="Lily Kearns" width="500" height="500"><h3>Lily Kearns</h3><span class="role">Master's Student, MMG</span><p>Microtubule organization and dynamics during neuronal differentiation.</p><p class="profiles"><a href="https://www.linkedin.com/in/lily-kearns-177135243/">LinkedIn</a></p></div>
       <div class="person"><img loading="lazy" class="avatar" src="media/kathleen-avazpour-sq.jpg" alt="Kathleen Avazpour" width="500" height="500"><h3>Kathleen Avazpour</h3><span class="role">Undergraduate</span><p>Work-study lab assistant.</p><p class="profiles"><a href="https://www.linkedin.com/in/kathleenavazpour/">LinkedIn</a></p></div>
       <div class="person"><img loading="lazy" class="avatar" src="media/ashley-lefebvre-sq.jpg" alt="Ashley Lefebvre" width="500" height="500"><h3>Ashley Lefebvre</h3><span class="role">Undergraduate Researcher</span><p>Novel anti-cancer drugs.</p><p class="profiles"><a href="https://www.linkedin.com/in/ashley-lefebvre-0a693a335/">LinkedIn</a></p></div>
@@ -1005,7 +1008,7 @@ footer { padding-block: 40px; border-top: 1px solid var(--line); color: var(--mu
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">News</p><h2>Lately</h2></div>
     <div class="news"><ul>
-      <li><span class="d">Nov 2026</span><span>Two Cathy Bulman Awards at the 2026 MPBP Annual Retreat: undergraduate researcher Elsa wins Best Flash Talk, and Amila wins Best Poster.</span></li>
+      <li><span class="d">Nov 2026</span><span>Two Cathy Bulman Awards at the 2026 MPBP Annual Retreat: undergraduate researcher Elsa wins Best Flash Talk, and Amila wins Best Poster.<figure class="news-photo"><img loading="lazy" src="media/news-elsa-poster-2026.jpg" alt="Elsa Williams smiling beside her poster, Identifying Mitotic Mechanisms of Resistance to KIF18A Inhibition in CIN Cells" width="1200" height="901"><figcaption>Elsa with her poster on resistance to KIF18A inhibitors.</figcaption></figure></span></li>
       <li><span class="d">Oct 2026</span><span>Amila wins Best Poster at the CMB Halloween Poster Session.</span></li>
       <li><span class="d">Aug 2026</span><span>The UVM Cancer Center <a href="https://www.uvm.edu/larnermed/uvmcancercenter/news/season-success-celebrating-trainee-amila-semics-publications-f31">highlights Amila's recent successes</a>: two publications and an F31 fellowship.</span></li>
       <li><span class="d">Aug 2026</span><span>Amila's paper on the phosphorylation switch that controls KIF11 force output is <a href="https://doi.org/10.1073/pnas.2602415123">out in <i>PNAS</i></a>.</span></li>
